@@ -1,5 +1,5 @@
 ﻿using TraineeTracker.Application.DTOs.Common;
-using TraineeTracker.Domain;
+using TraineeTracker.Application.DTOs.Trainee;
 
 namespace TraineeTracker.Application.DTOs.Tracker
 {
@@ -11,6 +11,6 @@ namespace TraineeTracker.Application.DTOs.Tracker
         public DateTime StartDate { get; set; }
         public string TechnicalSkill { get; set; } = null!;
         public string ConsultantSkill { get; set; } = null!;
-        public Trainee Trainee { get; set; }
+        public TraineeDto Trainee { get; set; }
     }
 }

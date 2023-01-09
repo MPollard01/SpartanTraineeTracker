@@ -7,6 +7,7 @@ namespace TraineeTracker.Persistence
     {
         public TraineeTrackerDbContext(DbContextOptions<TraineeTrackerDbContext> options) : base(options)
         {
+            
         }
 
         public DbSet<Tracker> Trackers { get; set; }
@@ -15,11 +16,14 @@ namespace TraineeTracker.Persistence
         public DbSet<Trainer> Trainer { get; set; }
         public DbSet<TrainerTrainee> TrainerTrainees { get; set; }
         public DbSet<TrainerCourse> TrainerCourses { get; set; }
+        public DbSet<TraineeTrainer> TraineeTrainers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(TraineeTrackerDbContext).Assembly);
 
+            modelBuilder.Entity<TraineeTrainer>()
+                .HasKey(tt => new { tt.TraineeId, tt.TrainerId });
             modelBuilder.Entity<TrainerTrainee>()
                 .HasKey(tt => new { tt.TrainerId, tt.TraineeId });
             modelBuilder.Entity<TrainerCourse>()

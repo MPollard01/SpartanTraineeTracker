@@ -8,13 +8,16 @@ namespace TraineeTracker.Persistence.Repositories
     {
         public TrainerRepository(TraineeTrackerDbContext dbContext) : base(dbContext)
         {
+            
         }
 
         public async Task<List<Trainer>> GetTrainersWithDetails()
         {
             return await _dbContext.Trainer
                 .Include(t => t.Trainees)
+                .ThenInclude(x => x.Trainee)
                 .Include(t => t.Courses)
+                .ThenInclude(t => t.Course)
                 .ToListAsync();
         }
 
@@ -23,7 +26,9 @@ namespace TraineeTracker.Persistence.Repositories
             return await _dbContext.Trainer
                 .Where(t => t.Id == id)
                 .Include(t => t.Trainees)
+                .ThenInclude(x => x.Trainee)
                 .Include(t => t.Courses)
+                .ThenInclude(t => t.Course)
                 .FirstOrDefaultAsync();
         }
     }

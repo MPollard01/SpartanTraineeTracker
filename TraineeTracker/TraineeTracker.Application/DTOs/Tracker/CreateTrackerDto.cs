@@ -9,6 +9,5 @@ namespace TraineeTracker.Application.DTOs.Tracker
         public DateTime StartDate { get; set; }
         public string TechnicalSkill { get; set; } = null!;
         public string ConsultantSkill { get; set; } = null!;
-        public string TraineeId { get; set; }
     }
 }

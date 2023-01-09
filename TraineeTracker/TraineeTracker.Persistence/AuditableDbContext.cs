@@ -7,6 +7,7 @@ namespace TraineeTracker.Persistence
     {
         public AuditableDbContext(DbContextOptions options) : base(options)
         {
+           
         }
 
         public virtual async Task<int> SaveChangesAsync(string username = "SYSTEM")

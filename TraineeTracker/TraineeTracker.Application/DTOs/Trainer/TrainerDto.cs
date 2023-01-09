@@ -1,5 +1,5 @@
-﻿using TraineeTracker.Application.DTOs.Course;
-using TraineeTracker.Application.DTOs.Trainee;
+﻿using TraineeTracker.Application.DTOs.TrainerCourse;
+using TraineeTracker.Application.DTOs.TrainerTrainee;
 
 namespace TraineeTracker.Application.DTOs.Trainer
 {
@@ -9,7 +9,7 @@ namespace TraineeTracker.Application.DTOs.Trainer
         public string Email { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public List<CourseDto> Courses { get; set; }
-        public List<TraineeDto> Trainees { get; set; }
+        public List<TrainerCourseDto> Courses { get; set; }
+        public List<TrainerTraineeDto> Trainees { get; set; }
     }
 }

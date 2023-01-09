@@ -9,6 +9,6 @@ namespace TraineeTracker.Domain
         public string LastName { get; set; } = null!;
         public int CourseId { get; set; }
         public virtual Course Course { get; set; }
-        public virtual ICollection<Trainer>? Trainers { get; set; }
+        public ICollection<TraineeTrainer> Trainers { get; set; }
     }
 }
