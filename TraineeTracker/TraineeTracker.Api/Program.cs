@@ -87,7 +87,7 @@ void AddSwaggerDoc(IServiceCollection services)
         c.SwaggerDoc("v1", new OpenApiInfo
         {
             Version = "v1",
-            Title = "HR Leave Management Api",
+            Title = "Trainee Tracker Api",
 
         });
 
