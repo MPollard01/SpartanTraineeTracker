@@ -25,11 +25,21 @@ namespace TraineeTracker.MVC.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        public SelectList Roles { get; set; }
     }
 
     public class RegisterTrainerVM : RegisterVM
     {
+        public SelectList TraineeList { get; set; }
+        public List<TraineeVM> Trainees  { get; set; }
+        public SelectList CourseList { get; set; }
+        public List<CourseVM> Courses { get; set; }
+    }
 
+    public class RegisterTraineeVM : RegisterVM
+    {
+        public SelectList TrainerList { get; set; }
+        public List<TrainerVM> Trainers { get; set; }
+        public SelectList CourseList { get; set; }
+        public CourseVM Course { get; set; }
     }
 }
