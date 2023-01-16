@@ -19,7 +19,9 @@ namespace TraineeTracker.Persistence
             services.AddScoped<ITrackerRepository, TrackerRepository>();
             services.AddScoped<ITraineeRepository, TraineeRepository>();
             services.AddScoped<ITrainerRepository, TrainerRepository>();
+            services.AddScoped<ITrainerTraineeRepository, TrainerTraineeRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<ITrainerCourseRepository, TrainerCourseRepository>();
 
             return services;
         }

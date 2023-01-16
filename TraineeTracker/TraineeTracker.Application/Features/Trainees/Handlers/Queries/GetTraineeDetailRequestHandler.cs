@@ -6,7 +6,7 @@ using TraineeTracker.Application.Features.Trainees.Requests.Queries;
 
 namespace TraineeTracker.Application.Features.Trainees.Handlers.Queries
 {
-    public class GetTraineeDetailRequestHandler : IRequestHandler<GetTraineeDetailRequest, TraineeDto>
+    public class GetTraineeDetailRequestHandler : IRequestHandler<GetTraineeDetailRequest, TraineeDetailDto>
     {
         private readonly ITraineeRepository _traineeRepository;
         private readonly IMapper _mapper;
@@ -17,10 +17,10 @@ namespace TraineeTracker.Application.Features.Trainees.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<TraineeDto> Handle(GetTraineeDetailRequest request, CancellationToken cancellationToken)
+        public async Task<TraineeDetailDto> Handle(GetTraineeDetailRequest request, CancellationToken cancellationToken)
         {
             var trainee = await _traineeRepository.GetTraineeWithDetails(request.Id);
-            return _mapper.Map<TraineeDto>(trainee);
+            return _mapper.Map<TraineeDetailDto>(trainee);
         }
     }
 }

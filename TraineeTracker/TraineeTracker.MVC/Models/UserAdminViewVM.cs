@@ -1,9 +1,10 @@
-﻿namespace TraineeTracker.MVC.Models
+﻿using System.Collections;
+
+namespace TraineeTracker.MVC.Models
 {
     public class UserAdminViewVM
     {
-        public List<TrainerVM> Trainers { get; set; }
-        public List<TraineeVM> Trainees { get; set; }
+        public ArrayList Users { get; set; }
         public RegisterTrainerVM RegisterTrainers { get; set; }
         public RegisterTraineeVM RegisterTrainees { get; set; }
     }

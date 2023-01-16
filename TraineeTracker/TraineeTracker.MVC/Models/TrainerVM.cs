@@ -1,4 +1,6 @@
-﻿namespace TraineeTracker.MVC.Models
+﻿using TraineeTracker.MVC.Services.Base;
+
+namespace TraineeTracker.MVC.Models
 {
     public class TrainerVM
     {
@@ -6,14 +8,15 @@
         public string Email { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public List<CourseVM> Course { get; set; }
-        public List<TraineeVM> Trainers { get; set; }
+        public List<CourseDto> Courses { get; set; }
+        public List<TraineeDetailDto> Trainees { get; set; }
     }
 
     public class TrainerListVM
     {
-        public string Id { get; }
-        public string FirstName { get; }
-        public string LastName { get; }
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
     }
 }

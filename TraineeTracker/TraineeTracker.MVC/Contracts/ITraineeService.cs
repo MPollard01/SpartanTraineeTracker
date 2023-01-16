@@ -6,6 +6,6 @@ namespace TraineeTracker.MVC.Contracts
     public interface ITraineeService
     {
         Task<Response<int>> CreateTrainee(RegisterTraineeVM traineeVM);
-        Task<List<TraineeVM>> GetTrainees();
+        Task<List<TraineeListVM>> GetTrainees();
     }
 }

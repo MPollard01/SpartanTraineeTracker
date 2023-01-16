@@ -19,7 +19,7 @@ namespace TraineeTracker.Application.Features.Trainers.Handlers.Queries
 
         public async Task<List<TrainerDto>> Handle(GetTrainerListRequest request, CancellationToken cancellationToken)
         {
-            var trainers = await _trainerRepository.GetTrainersWithDetails();
+            var trainers = await _trainerRepository.GetAll();
             return _mapper.Map<List<TrainerDto>>(trainers);
         }
     }

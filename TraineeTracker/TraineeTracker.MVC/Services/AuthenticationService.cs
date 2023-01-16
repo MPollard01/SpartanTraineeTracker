@@ -51,18 +51,11 @@ namespace TraineeTracker.MVC.Services
             }
         }
 
-        public async Task<bool> Register(RegisterVM registration)
+        public async Task<string> Register(RegisterVM registration, string role)
         {
-
             RegistrationRequest registrationRequest = _mapper.Map<RegistrationRequest>(registration);
-            var response = await _client.RegisterAsync(registrationRequest);
-
-            if (!string.IsNullOrEmpty(response.UserId))
-            {
-                await Authenticate(registration.Email, registration.Password);
-                return true;
-            }
-            return false;
+            var response = await _client.RegisterAsync(role, registrationRequest);
+            return response.UserId;
         }
 
         public async Task Logout()

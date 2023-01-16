@@ -9,7 +9,7 @@ namespace TraineeTracker.Application.DTOs.Trainer
         public string Email { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public List<CourseDto> Courses { get; set; }
-        public List<TraineeDto> Trainees { get; set; }
+        //public List<CourseDto> Courses { get; set; }
+        //public List<TraineeDto> Trainees { get; set; }
     }
 }

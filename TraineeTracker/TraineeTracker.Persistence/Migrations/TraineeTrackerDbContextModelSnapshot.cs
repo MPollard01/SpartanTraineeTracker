@@ -36,7 +36,7 @@ namespace TraineeTracker.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
 
                     b.HasData(
                         new
@@ -110,12 +110,13 @@ namespace TraineeTracker.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Trackers");
+                    b.ToTable("Tracker");
                 });
 
             modelBuilder.Entity("TraineeTracker.Domain.Trainee", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CourseId")
@@ -137,7 +138,7 @@ namespace TraineeTracker.Persistence.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Trainees");
+                    b.ToTable("Trainee");
 
                     b.HasData(
                         new
@@ -158,46 +159,10 @@ namespace TraineeTracker.Persistence.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TraineeTracker.Domain.TraineeTrainer", b =>
-                {
-                    b.Property<string>("TraineeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TrainerId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TraineeId", "TrainerId");
-
-                    b.HasIndex("TrainerId");
-
-                    b.ToTable("TraineeTrainers");
-
-                    b.HasData(
-                        new
-                        {
-                            TraineeId = "7e6adc8b-0a6e-4970-af0c-18f7fe18336d",
-                            TrainerId = "9e224968-33e4-4652-b7b7-8574d048cdb9"
-                        },
-                        new
-                        {
-                            TraineeId = "2cbdecbb-791e-45c0-93de-51abc9b71859",
-                            TrainerId = "9e224968-33e4-4652-b7b7-8574d048cdb9"
-                        },
-                        new
-                        {
-                            TraineeId = "7e6adc8b-0a6e-4970-af0c-18f7fe18336d",
-                            TrainerId = "0c1518f6-e6bc-4568-b694-e50fb2a3eac1"
-                        },
-                        new
-                        {
-                            TraineeId = "2cbdecbb-791e-45c0-93de-51abc9b71859",
-                            TrainerId = "0c1518f6-e6bc-4568-b694-e50fb2a3eac1"
-                        });
-                });
-
             modelBuilder.Entity("TraineeTracker.Domain.Trainer", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
@@ -245,7 +210,7 @@ namespace TraineeTracker.Persistence.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("TrainerCourses");
+                    b.ToTable("TrainerCourse");
 
                     b.HasData(
                         new
@@ -282,7 +247,7 @@ namespace TraineeTracker.Persistence.Migrations
 
                     b.HasIndex("TraineeId");
 
-                    b.ToTable("TrainerTrainees");
+                    b.ToTable("TrainerTrainee");
 
                     b.HasData(
                         new
@@ -318,25 +283,6 @@ namespace TraineeTracker.Persistence.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("TraineeTracker.Domain.TraineeTrainer", b =>
-                {
-                    b.HasOne("TraineeTracker.Domain.Trainee", "Trainee")
-                        .WithMany("Trainers")
-                        .HasForeignKey("TraineeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TraineeTracker.Domain.Trainer", "Trainer")
-                        .WithMany()
-                        .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Trainee");
-
-                    b.Navigation("Trainer");
-                });
-
             modelBuilder.Entity("TraineeTracker.Domain.TrainerCourse", b =>
                 {
                     b.HasOne("TraineeTracker.Domain.Course", "Course")
@@ -346,7 +292,7 @@ namespace TraineeTracker.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("TraineeTracker.Domain.Trainer", "Trainer")
-                        .WithMany("Courses")
+                        .WithMany()
                         .HasForeignKey("TrainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -365,7 +311,7 @@ namespace TraineeTracker.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("TraineeTracker.Domain.Trainer", "Trainer")
-                        .WithMany("Trainees")
+                        .WithMany()
                         .HasForeignKey("TrainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -373,18 +319,6 @@ namespace TraineeTracker.Persistence.Migrations
                     b.Navigation("Trainee");
 
                     b.Navigation("Trainer");
-                });
-
-            modelBuilder.Entity("TraineeTracker.Domain.Trainee", b =>
-                {
-                    b.Navigation("Trainers");
-                });
-
-            modelBuilder.Entity("TraineeTracker.Domain.Trainer", b =>
-                {
-                    b.Navigation("Courses");
-
-                    b.Navigation("Trainees");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,14 +12,14 @@ namespace TraineeTracker.Persistence.Repositories
 
         public async Task<List<Tracker>> GetTrackersWithDetails()
         {
-            return await _dbContext.Trackers
+            return await _dbContext.Tracker
                 .Include(t => t.TraineeId)
                 .ToListAsync();
         }
 
         public async Task<List<Tracker>> GetTrackersWithDetails(string userId)
         {
-            return await _dbContext.Trackers
+            return await _dbContext.Tracker
                 .Where(t => t.TraineeId == userId)
                 .Include(t => t.TraineeId)
                 .ToListAsync();
@@ -27,7 +27,7 @@ namespace TraineeTracker.Persistence.Repositories
 
         public async Task<Tracker> GetTrackerWithDetails(int id)
         {
-            return await _dbContext.Trackers
+            return await _dbContext.Tracker
                 .Include(t => t.TraineeId)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }

@@ -1,0 +1,77 @@
+﻿@model UserAdminViewVM
+
+    <nav class="navbar justify-content-center gap-5 bg-light p-0">
+        <form class="mx-2 w-25" role="search">
+            <div class="input-group">
+                <input class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
+                <button class="btn btn-primary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+        <ul class="pagination m-0">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-tabs border-0" id="myTab">
+            <li class="nav-item">
+            <button class="nav-link border-0" data-bs-toggle="modal" data-bs-target="#trainerModal"><i class="bi bi-plus-circle-fill text-success"></i> Add Trainer</button>
+            </li>
+            <li class="nav-item">
+            <button class="nav-link border-0"><i class="bi bi-plus-circle-fill text-success"></i> Add Trainee</button>
+            </li>
+            
+            
+        </ul>
+    </nav>
+
+    <partial name="_CreateTrainerPartial" model="Model.RegisterTrainers"/>
+
+    <table class="table w-100">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                @if(user is TrainerListVM)
+                {
+                    <partial name="_TrainerPartial" model="user"/>
+                }
+                else
+                {
+                    <partial name="_TraineePartial" model="user"/>
+                }
+            }
+        </tbody>
+    </table>
+
+@section Scripts {
+    <script>
+        const triggerTabList = document.querySelectorAll('#myTab button')
+        triggerTabList.forEach(triggerEl => {
+            const tabTrigger = new bootstrap.Tab(triggerEl)
+
+            triggerEl.addEventListener('click', event => {
+                event.preventDefault()
+                tabTrigger.show()
+            })
+        })
+    </script>
+}

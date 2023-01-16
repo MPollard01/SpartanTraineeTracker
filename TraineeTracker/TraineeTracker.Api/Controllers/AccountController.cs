@@ -21,9 +21,9 @@ namespace TraineeTracker.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request)
+        public async Task<ActionResult<RegistrationResponse>> Register(RegistrationRequest request, string role)
         {
-            return Ok(await _authenticationService.Register(request));
+            return Ok(await _authenticationService.Register(request, role));
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public partial class Client : IClient
     {
-        public HttpClient HttpClient { get; }
+        public HttpClient HttpClient => _httpClient;
     }
 }

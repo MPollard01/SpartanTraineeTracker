@@ -26,7 +26,7 @@ namespace TraineeTracker.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TrainerDto>> Get(string id)
+        public async Task<ActionResult<TrainerDetailDto>> Get(string id)
         {
             var trainer = await _mediator.Send(new GetTrainerDetailRequest { Id = id });
             return Ok(trainer);

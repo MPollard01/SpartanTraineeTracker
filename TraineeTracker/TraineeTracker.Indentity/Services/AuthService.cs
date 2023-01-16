@@ -55,7 +55,7 @@ namespace TraineeTracker.Indentity.Services
             return response;
         }
 
-        public async Task<RegistrationResponse> Register(RegistrationRequest request)
+        public async Task<RegistrationResponse> Register(RegistrationRequest request, string role)
         {
             var existingUser = await _userManager.FindByNameAsync(request.UserName);
 
@@ -81,7 +81,7 @@ namespace TraineeTracker.Indentity.Services
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "Employee");
+                    await _userManager.AddToRoleAsync(user, role);
                     return new RegistrationResponse() { UserId = user.Id };
                 }
                 else

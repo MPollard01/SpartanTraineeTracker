@@ -5,7 +5,7 @@ namespace TraineeTracker.MVC.Contracts
     public interface IAuthenticationService
     {
         Task<bool> Authenticate(string email, string password);
-        Task<bool> Register(RegisterVM registration);
+        Task<string> Register(RegisterVM registration, string role);
         Task Logout();
     }
 }

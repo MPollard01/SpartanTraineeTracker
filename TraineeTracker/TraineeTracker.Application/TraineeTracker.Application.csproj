@@ -17,4 +17,11 @@
     <ProjectReference Include="..\TraineeTracker.Domain\TraineeTracker.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\TrainerCourses\Handlers\Queries\" />
+    <Folder Include="Features\TrainerCourses\Requests\Queries\" />
+    <Folder Include="Features\TrainerTrainees\Handlers\Queries\" />
+    <Folder Include="Features\TrainerTrainees\Requests\Queries\" />
+  </ItemGroup>
+
 </Project>

@@ -5,29 +5,42 @@ namespace TraineeTracker.Persistence
 {
     public class TraineeTrackerDbContext : AuditableDbContext
     {
-        public TraineeTrackerDbContext(DbContextOptions<TraineeTrackerDbContext> options) : base(options)
+        public TraineeTrackerDbContext(DbContextOptions<TraineeTrackerDbContext> options) 
+            : base(options)
         {
-            
+           
         }
 
-        public DbSet<Tracker> Trackers { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Trainee> Trainees { get; set; }
+        public DbSet<Tracker> Tracker { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<Trainee> Trainee { get; set; }
         public DbSet<Trainer> Trainer { get; set; }
-        public DbSet<TrainerTrainee> TrainerTrainees { get; set; }
-        public DbSet<TrainerCourse> TrainerCourses { get; set; }
-        public DbSet<TraineeTrainer> TraineeTrainers { get; set; }
+        public DbSet<TrainerTrainee> TrainerTrainee { get; set; }
+        public DbSet<TrainerCourse> TrainerCourse { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(TraineeTrackerDbContext).Assembly);
-
-            modelBuilder.Entity<TraineeTrainer>()
-                .HasKey(tt => new { tt.TraineeId, tt.TrainerId });
+           
             modelBuilder.Entity<TrainerTrainee>()
                 .HasKey(tt => new { tt.TrainerId, tt.TraineeId });
             modelBuilder.Entity<TrainerCourse>()
                 .HasKey(tc => new { tc.TrainerId, tc.CourseId });
+
+            modelBuilder.Entity<Trainer>()
+                .HasMany(t => t.Trainees)
+                .WithMany(t => t.Trainers)
+                .UsingEntity<TrainerTrainee>();
+
+            modelBuilder.Entity<Trainee>()
+                .HasMany(t => t.Trainers)
+                .WithMany(t => t.Trainees)
+                .UsingEntity<TrainerTrainee>();
+
+            modelBuilder.Entity<Course>()
+                .HasMany(c => c.Trainers)
+                .WithMany(c => c.Courses)
+                .UsingEntity<TrainerCourse>();
         }
     }
 }

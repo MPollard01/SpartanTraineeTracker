@@ -10,22 +10,28 @@ namespace TraineeTracker.Persistence.Repositories
         {
         }
 
+        public async Task<List<Trainee>> GetTraineesByCourse(int courseId)
+        {
+            return await _dbContext.Trainee
+                .Where(t => t.CourseId == courseId)
+                .ToListAsync();
+        }
+
         public async Task<List<Trainee>> GetTraineesWithDetails()
         {
-            return await _dbContext.Trainees
-                .Include(t => t.Trainers)
-                .ThenInclude(x => x.Trainer)
+            return await _dbContext.Trainee
+                .Include(t => t.Trainers)               
                 .Include(t => t.Course)
                 .ToListAsync();
         }
 
         public async Task<Trainee> GetTraineeWithDetails(string id)
         {
-            return await _dbContext.Trainees
+            return await _dbContext.Trainee
                 .Where(t => t.Id == id)
                 .Include(t => t.Course)
                 .Include(t => t.Trainers)
-                .ThenInclude(x => x.Trainer)
+                .ThenInclude(t => t.Trainees)
                 .FirstOrDefaultAsync();
         }
     }

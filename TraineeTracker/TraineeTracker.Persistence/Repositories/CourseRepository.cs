@@ -12,7 +12,7 @@ namespace TraineeTracker.Persistence.Repositories
 
         public async Task<Course> GetCourseByTitle(string title)
         {
-            return await _dbContext.Courses
+            return await _dbContext.Course
                 .FirstOrDefaultAsync(c => c.Title == title);
         }
     }

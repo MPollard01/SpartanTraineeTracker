@@ -14,14 +14,14 @@ namespace TraineeTracker.Persistence.Configurations.Entities
                     Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                     Email = "johndoe@sparta.com",
                     FirstName = "John",
-                    LastName = "Doe",
+                    LastName = "Doe",              
                 },
                 new Trainer
                 {
                     Id = "0c1518f6-e6bc-4568-b694-e50fb2a3eac1",
                     Email = "janedoe@sparta.com",
                     FirstName = "Jane",
-                    LastName = "Doe",
+                    LastName = "Doe",                   
                 }
             );
         }
