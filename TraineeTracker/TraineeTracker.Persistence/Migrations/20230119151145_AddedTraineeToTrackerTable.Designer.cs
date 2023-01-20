@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TraineeTracker.Persistence;
 
@@ -11,9 +12,11 @@ using TraineeTracker.Persistence;
 namespace TraineeTracker.Persistence.Migrations
 {
     [DbContext(typeof(TraineeTrackerDbContext))]
-    partial class TraineeTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230119151145_AddedTraineeToTrackerTable")]
+    partial class AddedTraineeToTrackerTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,22 +116,6 @@ namespace TraineeTracker.Persistence.Migrations
                     b.HasIndex("TraineeId");
 
                     b.ToTable("Tracker");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConsultantSkill = "Partially Skilled",
-                            Continue = "Learning C#",
-                            CreatedBy = "Carl Angle",
-                            CreatedDate = new DateTime(2022, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Start = "Studying every day",
-                            StartDate = new DateTime(2022, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Stop = "Making silly mistakes",
-                            TechnicalSkill = "Skilled",
-                            TraineeId = "7e6adc8b-0a6e-4970-af0c-18f7fe18336d"
-                        });
                 });
 
             modelBuilder.Entity("TraineeTracker.Domain.Trainee", b =>

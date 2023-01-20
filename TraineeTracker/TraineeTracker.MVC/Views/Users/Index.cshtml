@@ -1,40 +1,107 @@
 ﻿@model UserAdminViewVM
 
+@{
+    ViewData["Title"] = "Users";
+
+    var prevDisabled = !Model.Users.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Users.HasNextPage ? "disabled" : "";
+
+    int next = Model.Users.PageIndex + 1;
+    int prev = Model.Users.PageIndex - 1;
+
+    var filter = (string[])ViewData["Filter"];
+    var isFilterTrainer = filter.Contains("trainer");
+    var isFilterTrainee = filter.Contains("trainee");
+}
+
     <nav class="navbar justify-content-center gap-5 bg-light p-0">
         <form class="mx-2 w-25" role="search">
             <div class="input-group">
-                <input class="form-control" name="searchString" value="@ViewData["CurrentFilter"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
-                <button class="btn btn-primary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
+                <button class="btn btn-secondary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
+                <input class="form-control bg-light rounded-end" name="searchString" value="@ViewData["CurrentFilter"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
+                <input name="pageNumber" value="@Model.Users.PageIndex" hidden />
+                @if (!string.IsNullOrEmpty((string)ViewData["CurrentSort"]))
+                {
+                    <input name="sortOrder" value="@ViewData["CurrentSort"]" hidden />
+                }
+                @if(isFilterTrainer)
+                {
+                    <input name="filter" value="trainer" hidden />
+                }
+                @if (isFilterTrainee)
+                {
+                    <input name="filter" value="trainee" hidden />
+                }
             </div>
         </form>
         <ul class="pagination m-0">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
+        <li class="page-item @prevDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["CurrentSort"], searchString = ViewData["CurrentFilter"], pageNumber = prev, filter = filter})"><i class="bi bi-arrow-left"></i></a></li>
+        @for (int i = 1; i <= Model.Users.TotalPages; i++)
+        {
+            <li class="page-item"><a class="page-link @(i == Model.Users.PageIndex ? "active": "")" href="@Url.Page("", new {sortOrder = ViewData["CurrentSort"], searchString = ViewData["CurrentFilter"], pageNumber = i, filter = filter})">@i</a></li>
+        }
+        <li class="page-item @nextDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["CurrentSort"], searchString = ViewData["CurrentFilter"],  pageNumber = next, filter = filter})"><i class="bi bi-arrow-right"></i></a></li>
         </ul>
         <ul class="nav nav-tabs border-0" id="myTab">
             <li class="nav-item">
             <button class="nav-link border-0" data-bs-toggle="modal" data-bs-target="#trainerModal"><i class="bi bi-plus-circle-fill text-success"></i> Add Trainer</button>
             </li>
             <li class="nav-item">
-            <button class="nav-link border-0"><i class="bi bi-plus-circle-fill text-success"></i> Add Trainee</button>
-            </li>
-            
-            
+            <button class="nav-link border-0" data-bs-toggle="modal" data-bs-target="#traineeModal"><i class="bi bi-plus-circle-fill text-success"></i> Add Trainee</button>
+            </li>            
         </ul>
+    
+        <ul class="nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link text-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter
+                </a>
+                
+                <ul class="dropdown-menu">
+                    <form id="filterForm" asp-action="Index" method="get">
+                <li>
+                    <div class="dropdown-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" checked="@isFilterTrainer" name="filter" value="trainer" id="Checkme1"
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <label class="form-check-label" for="Checkme1">Trainer</label>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="dropdown-item">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" checked="@isFilterTrainee" name="filter" value="trainee" id="Checkme2"
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <label class="form-check-label" for="Checkme2">Trainee</label>
+                        </div>
+                    </div>
+                </li>
+                <input name="pageNumber" value="@Model.Users.PageIndex" hidden/>
+                <input name="sortOrder" value="@ViewData["CurrentSort"]" hidden/>
+                <input name="searchString" value="@ViewData["CurrentFilter"]" hidden/>
+                </form>
+                </ul>
+            
+            </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link text-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort By
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item @((string)ViewData["CurrentSort"] == "firstname" ? "active": "")" href="@Url.Page("", new {sortOrder = "firstname", searchString = ViewData["CurrentFilter"], pageNumber = Model.Users.PageIndex, filter = filter})">First Name</a></li>
+                <li><a class="dropdown-item @((string)ViewData["CurrentSort"] == "lastname" ? "active": "")" href="@Url.Page("", new {sortOrder = "lastname", searchString = ViewData["CurrentFilter"], pageNumber = Model.Users.PageIndex, filter = filter})">Last Name</a></li>
+                <li><a class="dropdown-item @((string)ViewData["CurrentSort"] == "id" ? "active": "")" href="@Url.Page("", new {sortOrder = "id", searchString = ViewData["CurrentFilter"], pageNumber = Model.Users.PageIndex, filter = filter})">Id</a></li>
+                <li><a class="dropdown-item @((string)ViewData["CurrentSort"] == "email" ? "active": "")" href="@Url.Page("", new {sortOrder = "email", searchString = ViewData["CurrentFilter"], pageNumber = Model.Users.PageIndex, filter = filter})">Email</a></li>
+                <li><a class="dropdown-item @((string)ViewData["CurrentSort"] == "role" ? "active": "")" href="@Url.Page("", new {sortOrder = "role", searchString = ViewData["CurrentFilter"], pageNumber = Model.Users.PageIndex, filter = filter})">Role</a></li>
+            </ul>
+        </li>
+        </ul>
+ 
     </nav>
 
     <partial name="_CreateTrainerPartial" model="Model.RegisterTrainers"/>
+    <partial name="_CreateTraineePartial" model="Model.RegisterTrainees"/>
 
     <table class="table w-100">
         <thead>
@@ -62,16 +129,4 @@
         </tbody>
     </table>
 
-@section Scripts {
-    <script>
-        const triggerTabList = document.querySelectorAll('#myTab button')
-        triggerTabList.forEach(triggerEl => {
-            const tabTrigger = new bootstrap.Tab(triggerEl)
-
-            triggerEl.addEventListener('click', event => {
-                event.preventDefault()
-                tabTrigger.show()
-            })
-        })
-    </script>
-}
+<script src="~/js/tabs.js"></script>

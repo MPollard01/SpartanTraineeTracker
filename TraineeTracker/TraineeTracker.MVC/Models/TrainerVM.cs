@@ -12,11 +12,8 @@ namespace TraineeTracker.MVC.Models
         public List<TraineeDetailDto> Trainees { get; set; }
     }
 
-    public class TrainerListVM
+    public class TrainerListVM : UserListVM
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
+        
     }
 }

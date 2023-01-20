@@ -1,0 +1,175 @@
+﻿@model TrackerTraineeListVM
+
+@{
+    ViewData["Title"] = "Trackers";
+
+    var prevDisabled = !Model.Trackers.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Trackers.HasNextPage ? "disabled" : "";
+
+    int next = Model.Trackers.PageIndex + 1;
+    int prev = Model.Trackers.PageIndex - 1;
+
+    var filter = (string[])ViewData["Filter"];
+
+    var isFilterSkilled = filter.Contains("Skilled");
+    var isFilterPartialSkill = filter.Contains("Partially Skilled");
+    var isFilterLowSkill = filter.Contains("Low Skilled");
+    var isFilterUnskilled = filter.Contains("Unskilled");
+}
+
+<div class="container mt-3">
+    <header class="d-flex justify-content-between align-items-center">
+        <h1>My Tracker <button class="btn btn-lg" data-bs-toggle="modal" data-bs-target="#trackerModal"><i class="bi bi-plus-lg link-secondary" style="font-size: 2rem"></i></button></h1>
+        <form class="mx-2 w-25" role="search">
+            <div class="input-group">
+                <button class="btn btn-primary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
+                <input class="form-control rounded-end" name="searchString" value="@ViewData["Search"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
+                <input name="pageNumber" value="@Model.Trackers.PageIndex" hidden />
+                @if (!string.IsNullOrEmpty((string)ViewData["Sort"]))
+                {
+                    <input name="sortOrder" value="@ViewData["Sort"]" hidden />
+                }
+                
+            </div>
+        </form>
+        
+            <ul class="pagination m-0">
+                <li class="page-item @prevDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = prev, filter = filter})"><i class="bi bi-arrow-left"></i></a></li>
+                @for (int i = 1; i <= Model.Trackers.TotalPages; i++)
+                {
+                    <li class="page-item"><a class="page-link @(i == Model.Trackers.PageIndex ? "bg-white text-info": "")" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = i, filter = filter})">@i</a></li>
+                }
+                <li class="page-item @nextDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = next, filter = filter})"><i class="bi bi-arrow-right"></i></a></li>
+            </ul>
+
+            <ul class="nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filter
+                    </a>
+
+                    <ul class="dropdown-menu">
+                        <form id="filterForm" asp-action="Trackers" method="get">
+                        <li>
+                            <div class="dropdown-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" checked="@isFilterSkilled" name="filter" value="Skilled" id="skilled"
+                                           onchange="document.getElementById('filterForm').submit()" />
+                                    <label class="form-check-label" for="skilled">Skilled</label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" checked="@isFilterPartialSkill" name="filter" value="Partially Skilled" id="partial"
+                                           onchange="document.getElementById('filterForm').submit()" />
+                                    <label class="form-check-label" for="partial">Partially Skilled</label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" checked="@isFilterLowSkill" name="filter" value="Low Skilled" id="low"
+                                           onchange="document.getElementById('filterForm').submit()" />
+                                    <label class="form-check-label" for="low">Low Skilled</label>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" checked="@isFilterUnskilled" name="filter" value="Unskilled" id="unskilled"
+                                           onchange="document.getElementById('filterForm').submit()" />
+                                    <label class="form-check-label" for="unskilled">Unskilled</label>
+                                </div>
+                            </div>
+                        </li>
+                        <input name="pageNumber" value="@Model.Trackers.PageIndex" hidden />
+                        <input name="sortOrder" value="@ViewData["Sort"]" hidden />
+                        <input name="searchString" value="@ViewData["Search"]" hidden />
+                        </form>
+                    </ul>
+
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort By
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "firstname" ? "active": "")" href="@Url.Page("", new {sortOrder = "firstname", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">First Name</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "lastname" ? "active": "")" href="@Url.Page("", new {sortOrder = "lastname", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Last Name</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "id" ? "active": "")" href="@Url.Page("", new {sortOrder = "id", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Id</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "technical" ? "active": "")" href="@Url.Page("", new {sortOrder = "technical", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Technical Skill</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "consultant" ? "active": "")" href="@Url.Page("", new {sortOrder = "consultant", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Consultant Skill</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "date" ? "active": "")" href="@Url.Page("", new {sortOrder = "date", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Start Date</a></li>
+                    </ul>
+                </li>
+            </ul>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-eye"></i> View
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-action="Index">Weekly</a></li>
+
+            </ul>
+        </div>
+    </header>
+
+    <partial name="_CreateTrackerPartial" model="Model.CreateTracker" />
+
+    <hr />
+
+    <table class="table mt-4 table-primary table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Start Date</th>
+                <th>Start</th>
+                <th>Stop</th>
+                <th>Continue</th>
+                <th>Technical Skill</th>
+                <th>Consultant Skill</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Trackers)
+            {
+                string TechnicalSkillColour;
+                string ConsultantSkillColour;
+
+                if (user.TechnicalSkill == "Skilled")
+                    TechnicalSkillColour = "text-bg-success";
+                else if (user.TechnicalSkill == "Partially Skilled")
+                    TechnicalSkillColour = "text-bg-primary";
+                else if (user.TechnicalSkill == "Low Skilled")
+                    TechnicalSkillColour = "text-bg-warning";
+                else
+                    TechnicalSkillColour = "text-bg-danger";
+
+                if (user.ConsultantSkill == "Skilled")
+                    ConsultantSkillColour = "text-bg-success";
+                else if (user.ConsultantSkill == "Partially Skilled")
+                    ConsultantSkillColour = "text-bg-primary";
+                else if (user.ConsultantSkill == "Low Skilled")
+                    ConsultantSkillColour = "text-bg-warning";
+                else
+                    ConsultantSkillColour = "text-bg-danger";
+
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.StartDate.ToShortDateString()</td>
+                    <td>@user.Start</td>
+                    <td>@user.Stop</td>
+                    <td>@user.Continue</td>
+                    <td><span class="badge rounded-pill @TechnicalSkillColour">@user.TechnicalSkill</span></td>
+                    <td><span class="badge rounded-pill @ConsultantSkillColour">@user.ConsultantSkill</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>   
+</div>
+
+<script src="~/js/tabs.js"></script>

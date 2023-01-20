@@ -32,6 +32,14 @@ namespace TraineeTracker.Api.Controllers
             return Ok(trainer);
         }
 
+        [HttpGet("course")]
+        [EndpointName("TrainerAllByCourse")]
+        public async Task<ActionResult<List<TrainerDto>>> GetByCourse(int courseId)
+        {
+            var trainees = await _mediator.Send(new GetTrainerListByCourseRequest { Id = courseId });
+            return Ok(trainees);
+        }
+
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateTrainerDto trainerDto)
         {

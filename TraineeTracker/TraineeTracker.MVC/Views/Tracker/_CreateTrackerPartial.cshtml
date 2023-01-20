@@ -1,0 +1,57 @@
+﻿@model CreateTrackerVM
+
+<div class="modal fade" id="trackerModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-black" id="formModalLabel">Create New Tracker</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" asp-action="CreateTracker">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="form-group mb-3 col-6">
+                            <label asp-for="Start"></label>
+                            <input asp-for="Start" class="form-control" />
+                            <span asp-validation-for="Start" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3 col-6">
+                            <label asp-for="Stop"></label>
+                            <input asp-for="Stop" class="form-control" />
+                            <span asp-validation-for="Stop" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group mb-3 col-6">
+                            <label asp-for="Continue"></label>
+                            <input asp-for="Continue" class="form-control" />
+                            <span asp-validation-for="Continue" class="text-danger"></span>
+                        </div>
+            
+                    </div>
+                    <div class="row">
+                        <div class="form-group mb-3 col-6">
+                            <label asp-for="TechnicalSkill" class="control-label"></label>
+                            <select asp-for="TechnicalSkill" asp-items="Model.TechnicalSkills" class="form-select">
+                                <option>--Select Skill Level--</option>
+                            </select>
+                            <span asp-validation-for="TechnicalSkill" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3 col-6">
+                            <label asp-for="ConsultantSkill" class="control-label"></label>
+                            <select asp-for="ConsultantSkill" asp-items="Model.ConsultantSkills" class="form-select">
+                                <option>--Select Skill Level--</option>
+                            </select>
+                            <span asp-validation-for="ConsultantSkill" class="text-danger"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input form="form" type="submit" class="btn btn-primary" value="Submit" />
+            </div>
+        </div>
+    </div>
+</div>

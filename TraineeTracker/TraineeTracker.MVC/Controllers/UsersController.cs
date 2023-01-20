@@ -10,16 +10,23 @@ namespace TraineeTracker.MVC.Controllers
     {
         private readonly IUserService _userService;
         private readonly ITrainerService _trainerService;
+        private readonly ITraineeService _traineeService;
 
-        public UsersController(IUserService userService, ITrainerService trainerService)
+        public UsersController(IUserService userService, ITrainerService trainerService, 
+            ITraineeService traineeService)
         {
             _userService = userService;
             _trainerService = trainerService;
+            _traineeService = traineeService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchString, string sortOrder, string[] filter, int? pageNumber)
         {
-            var model = await _userService.GetUserAdminList();
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["Filter"] = filter;
+
+            var model = await _userService.GetUserAdminList(searchString, sortOrder, filter, pageNumber);
             return View(model);
         }
 
@@ -30,6 +37,23 @@ namespace TraineeTracker.MVC.Controllers
             if (ModelState.IsValid)
             {
                 var response = await _trainerService.CreateTrainer(trainer);
+                if (response.Success)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("", response.ValidationErrors);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateTrainee(RegisterTraineeVM trainer)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _traineeService.CreateTrainee(trainer);
                 if (response.Success)
                 {
                     return RedirectToAction(nameof(Index));

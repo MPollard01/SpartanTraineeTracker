@@ -11,5 +11,6 @@ namespace TraineeTracker.Domain
         public string TechnicalSkill { get; set; } = null!;
         public string ConsultantSkill { get; set; } = null!;
         public string TraineeId { get; set; } = null!;
+        public Trainee Trainee { get; set; }
     }
 }

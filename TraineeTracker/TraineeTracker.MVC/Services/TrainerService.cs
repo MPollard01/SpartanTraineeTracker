@@ -46,6 +46,8 @@ namespace TraineeTracker.MVC.Services
                 {
                     response.ValidationErrors =
                         string.Join(Environment.NewLine, apiResponse.Errors);
+
+                    return response;
                 }
 
                 foreach (var courseId in trainerVM.CourseIds)

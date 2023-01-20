@@ -1,5 +1,4 @@
 ﻿using TraineeTracker.Application.DTOs.Course;
-using TraineeTracker.Application.DTOs.TraineeTrainer;
 using TraineeTracker.Application.DTOs.Trainer;
 
 namespace TraineeTracker.Application.DTOs.Trainee

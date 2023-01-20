@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections;
 using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
+using TraineeTracker.MVC.Utils;
 
 namespace TraineeTracker.MVC.Services
 {
@@ -16,7 +16,8 @@ namespace TraineeTracker.MVC.Services
             _mapper = mapper;
         }
 
-        public async Task<UserAdminViewVM> GetUserAdminList()
+        public async Task<UserAdminViewVM> GetUserAdminList(string searchString, 
+            string sortOrder, string[] filter, int? pageNumber)
         {
             AddBearerToken();
 
@@ -24,16 +25,51 @@ namespace TraineeTracker.MVC.Services
             var trainees = await _client.TraineeAllAsync();
             var courses = await _client.CourseAllAsync();
             var trainerVMs = _mapper.Map<List<TrainerListVM>>(trainers);
-            var traineesVMs = _mapper.Map<List<TraineeListVM>>(trainees);
+            var traineeVMs = _mapper.Map<List<TraineeListVM>>(trainees);
             var courseList = new SelectList(courses, "Id", "Title");
-            var users = new ArrayList();
-            
-            users.AddRange(trainerVMs);
-            users.AddRange(traineesVMs);
+            var users = new List<UserListVM>();
 
+            if (filter.Length > 0)
+            {
+                if(filter.Contains("trainer"))
+                    users.AddRange(trainerVMs);
+                if(filter.Contains("trainee"))
+                    users.AddRange(traineeVMs);
+            }
+            else
+            {
+                users.AddRange(trainerVMs);
+                users.AddRange(traineeVMs);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u => u.FirstName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
+                                        || u.LastName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "firstname":
+                    users = users.OrderBy(u => u.FirstName).ToList();
+                    break;
+                case "lastname":
+                    users = users.OrderBy(u => u.LastName).ToList();
+                    break;
+                case "id":
+                    users = users.OrderBy(u => u.Id).ToList();
+                    break;
+                case "email":
+                    users = users.OrderBy(u => u.Email).ToList();
+                    break;
+                case "role":
+                    users.Reverse();
+                    break;
+            }
+            
             return new UserAdminViewVM
             {
-                Users = users,
+                Users = PaginatedList<UserListVM>.Create(users, pageNumber ?? 1, 5),
                 RegisterTrainers = new RegisterTrainerVM
                 {
                     CourseList = courseList,

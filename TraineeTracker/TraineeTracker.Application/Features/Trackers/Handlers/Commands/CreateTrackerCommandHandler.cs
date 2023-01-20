@@ -41,7 +41,11 @@ namespace TraineeTracker.Application.Features.Trackers.Handlers.Commands
                 var tracker = _mapper.Map<Tracker>(request.TrackerDto);
                 var userId = _httpContextAccessor.HttpContext.User.FindFirst(
                     q => q.Type == CustomClaimTypes.Uid)?.Value;
+
                 tracker.TraineeId = userId;
+                tracker.StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1);
+                tracker.CreatedDate = DateTime.Now;
+                tracker.CreatedBy = userId;
 
                 tracker = await _uow.TrackerRepository.Add(tracker);
                 await _uow.Save();

@@ -38,8 +38,9 @@ namespace TraineeTracker.MVC.Models
 
     public class RegisterTraineeVM : RegisterVM
     {
+        public int CourseId { get; set; }
+
         [ValidateNever]
         public SelectList CourseList { get; set; }
-        public CourseVM Course { get; set; }
     }
 }
