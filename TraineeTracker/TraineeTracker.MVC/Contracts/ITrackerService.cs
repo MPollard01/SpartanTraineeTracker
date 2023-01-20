@@ -8,7 +8,7 @@ namespace TraineeTracker.MVC.Contracts
     {
         Task<PaginatedList<TrackerListVM>> GetTrackers(string searchString, string sortOrder, string[] filter, int? pageNumber);
         Task<TrackerTraineeListVM> GetTraineeTrackers(string searchString, string sortOrder, string[] filter, int? pageNumber);
-        Task<TrackerTraineeVM> GetTracker(int id);
+        Task<TrackerTraineeVM> GetTracker(DateTime? date);
         Task<Response<int>> CreateTracker(CreateTrackerVM trackerVM);
     }
 }

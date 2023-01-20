@@ -16,9 +16,9 @@ namespace TraineeTracker.MVC.Controllers
         }
 
         [Authorize(Roles = "Trainee")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? date)
         {
-            var model = await _trackerService.GetTracker(1);
+            var model = await _trackerService.GetTracker(date);
             return View(model);
         }
 

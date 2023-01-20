@@ -32,6 +32,14 @@ namespace TraineeTracker.Api.Controllers
             return Ok(tracker);
         }
 
+        [HttpGet("date")]
+        [EndpointName("TrackerGETByDate")]
+        public async Task<ActionResult<TrackerDto>> Get(DateTime date)
+        {
+            var tracker = await _mediator.Send(new GetTrackerByDateRequest { Date = date });
+            return Ok(tracker);
+        }
+
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateTrackerDto trackerDto)
         {

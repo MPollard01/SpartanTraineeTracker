@@ -10,6 +10,20 @@ namespace TraineeTracker.Persistence.Repositories
         {
         }
 
+        public async Task<Tracker> GetTrackerByDate(DateTime date, string userId)
+        {
+            return await _dbContext.Tracker
+                .FirstOrDefaultAsync(t => 
+                    t.StartDate == date && t.TraineeId == userId);
+        }
+
+        public async Task<List<Tracker>> GetTrackersByDate(DateTime date)
+        {
+            return await _dbContext.Tracker
+                .Where(t => t.StartDate == date)
+                .ToListAsync();
+        }
+
         public async Task<List<Tracker>> GetTrackersWithDetails()
         {
             return await _dbContext.Tracker

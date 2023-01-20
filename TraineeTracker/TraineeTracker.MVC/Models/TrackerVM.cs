@@ -64,6 +64,9 @@ namespace TraineeTracker.MVC.Models
     public class TrackerTraineeVM
     {
         public TrackerVM Tracker { get; set; }
+        public DateTime? Date { get; set; }
+        public SelectList Dates { get; set; }
+        public List<DateTime> DateList { get; set; }
         public CreateTrackerVM CreateTracker { get; set; }
     }
 }

@@ -46,16 +46,23 @@ namespace TraineeTracker.MVC.Services
             }
         }
 
-        public async Task<TrackerTraineeVM> GetTracker(int id)
+        public async Task<TrackerTraineeVM> GetTracker(DateTime? date)
         {
             AddBearerToken();
-            var trainer = await _client.TrackerGETAsync(id);
+            var trackers = await _client.TrackerAllAsync(true);
+            var dates = trackers.Select(t => t.StartDate).ToList();
+            date = date ?? trackers.Max(t => t.StartDate);
+            var tracker = await _client.TrackerGETByDateAsync(date);
+
             var skills = new List<string> 
                 { "Skilled", "Partially Skilled", "Low Skilled", "Unskilled" };
 
             return new TrackerTraineeVM
             {
-                Tracker = _mapper.Map<TrackerVM>(trainer),
+                Tracker = _mapper.Map<TrackerVM>(tracker),
+                Dates = new SelectList(dates, date),
+                Date = date,
+                DateList = dates,
                 CreateTracker = new CreateTrackerVM
                 {
                     TechnicalSkills = new SelectList(skills),
