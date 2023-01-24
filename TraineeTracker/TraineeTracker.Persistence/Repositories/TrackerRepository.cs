@@ -24,6 +24,15 @@ namespace TraineeTracker.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Tracker>> GetTrackersByTrainer(string trainerId)
+        {
+            return await _dbContext.Tracker
+                .Include(t => t.Trainee)
+                .Where(t => t.Trainee.Trainers
+                .Any(tr => tr.Id == trainerId))
+                .ToListAsync();
+        }
+
         public async Task<List<Tracker>> GetTrackersWithDetails()
         {
             return await _dbContext.Tracker

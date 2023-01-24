@@ -22,4 +22,10 @@
     <ProjectReference Include="..\TraineeTracker.Indentity\TraineeTracker.Indentity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\web.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TraineeTracker.Application.DTOs.Tracker;
 using TraineeTracker.Application.Features.Trackers.Requests.Commands;
@@ -38,6 +39,15 @@ namespace TraineeTracker.Api.Controllers
         {
             var tracker = await _mediator.Send(new GetTrackerByDateRequest { Date = date });
             return Ok(tracker);
+        }
+
+        [Authorize(Roles = "Trainer")]
+        [HttpGet("trainer")]
+        [EndpointName("TrackerAllbyTrainer")]
+        public async Task<ActionResult<List<TrackerListDto>>> Get()
+        {
+            var trackers = await _mediator.Send(new GetTrackerListByTrainerRequest());
+            return Ok(trackers);
         }
 
         [HttpPost]

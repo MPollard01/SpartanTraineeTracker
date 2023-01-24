@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using TraineeTracker.Application.DTOs.Trainee;
@@ -31,6 +32,15 @@ namespace TraineeTracker.Api.Controllers
         public async Task<ActionResult<List<TraineeDto>>> GetByCourse(int courseId)
         {
             var trainees = await _mediator.Send(new GetTraineeListByCourseRequest { Id = courseId});
+            return Ok(trainees);
+        }
+
+        [Authorize(Roles = "Trainer")]
+        [HttpGet("trainer")]
+        [EndpointName("TraineeAllByTrainer")]
+        public async Task<ActionResult<List<TraineeCourseDto>>> GetTrainees()
+        {
+            var trainees = await _mediator.Send(new GetTraineeListByTrainerRequest());
             return Ok(trainees);
         }
 

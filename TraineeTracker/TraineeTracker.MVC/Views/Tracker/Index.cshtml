@@ -23,12 +23,20 @@
     else
         consultantSkillColour = "bg-danger";
 
-    var previousDate = Model.DateList.FirstOrDefault(d => d < Model.Date);
-    var nextDate = Model.DateList.FirstOrDefault(d => d > Model.Date);
-
     var defaultDate = new DateTime(0001, 01, 01);
-    var disablePreviousDate = previousDate == defaultDate ? "disabled" : "";
-    var disableNextDate = nextDate == defaultDate ? "disabled" : "";
+    var previousDate = defaultDate;
+    var nextDate = defaultDate;
+    var disablePreviousDate = "";
+    var disableNextDate = "";
+    var dateIndex = Model.DateList.IndexOf(Model.Date.Value);
+
+    if (Model.Date.HasValue && dateIndex > 0)
+        previousDate = Model.DateList[dateIndex - 1];
+    else disablePreviousDate = "disabled";
+
+    if (Model.Date.HasValue && dateIndex < Model.DateList.Count - 1)
+        nextDate = Model.DateList[dateIndex + 1];
+    else disableNextDate = "disabled";   
 }
 
 <div class="container mt-3">
@@ -36,7 +44,22 @@
         <h1>My Tracker <button class="btn btn-lg" data-bs-toggle="modal" data-bs-target="#trackerModal"><i class="bi bi-plus-lg link-secondary" style="font-size: 2rem"></i></button></h1>
         <div class="form-group d-flex gap-2 align-items-center">           
             <a href="@Url.Page("", new { date = previousDate })" class="btn btn-primary btn-sm @disablePreviousDate"><i class="bi bi-arrow-left"></i></a>
-            <select asp-for="Date" asp-items="Model.Dates" class="form-select"></select>
+            <form id="dateForm" asp-action="Index" method="get">
+                <select asp-for="Date" onchange="document.getElementById('dateForm').submit()" class="form-select">
+                @foreach(var date in Model.DateList)
+                {
+                        var d = date.ToString("MM/dd/yyyy");
+                        if(date == Model.Date)
+                        {
+                            <option selected value="@d">@date.ToShortDateString()</option>
+                        }
+                        else
+                        {
+                            <option value="@d">@date.ToShortDateString()</option>
+                        } 
+                }
+                </select>
+            </form>
             <a href="@Url.Page("", new { date = nextDate })" class="btn btn-primary btn-sm @disableNextDate"><i class="bi bi-arrow-right"></i></a>
         </div>
         <div class="dropdown">

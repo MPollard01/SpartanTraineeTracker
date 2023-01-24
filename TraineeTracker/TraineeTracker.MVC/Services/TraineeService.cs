@@ -80,5 +80,13 @@ namespace TraineeTracker.MVC.Services
             var trainees = await _client.TraineeAllAsync();
             return _mapper.Map<List<TraineeListVM>>(trainees);
         }
+
+        public async Task<List<TraineesVM>> GetTraineesByTrainer(string searchString, string sortOrder, string[] filters, int? pageNumber)
+        {
+            AddBearerToken();
+            var trainees = await _client.TraineeAllByTrainerAsync();
+
+            return _mapper.Map<List<TraineesVM>>(trainees);
+        }
     }
 }

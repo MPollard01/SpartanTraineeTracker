@@ -98,8 +98,6 @@
                         Sort By
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "firstname" ? "active": "")" href="@Url.Page("", new {sortOrder = "firstname", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">First Name</a></li>
-                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "lastname" ? "active": "")" href="@Url.Page("", new {sortOrder = "lastname", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Last Name</a></li>
                         <li><a class="dropdown-item @((string)ViewData["Sort"] == "id" ? "active": "")" href="@Url.Page("", new {sortOrder = "id", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Id</a></li>
                         <li><a class="dropdown-item @((string)ViewData["Sort"] == "technical" ? "active": "")" href="@Url.Page("", new {sortOrder = "technical", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Technical Skill</a></li>
                         <li><a class="dropdown-item @((string)ViewData["Sort"] == "consultant" ? "active": "")" href="@Url.Page("", new {sortOrder = "consultant", searchString = ViewData["Search"], pageNumber = Model.Trackers.PageIndex, filter = filter})">Consultant Skill</a></li>

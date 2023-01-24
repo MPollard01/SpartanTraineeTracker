@@ -9,5 +9,6 @@ namespace TraineeTracker.Application.Contracts.Persistence
         Task<List<Tracker>> GetTrackersByDate(DateTime date);
         Task<List<Tracker>> GetTrackersWithDetails();
         Task<List<Tracker>> GetTrackersWithDetails(string userId);
+        Task<List<Tracker>> GetTrackersByTrainer(string trainerId);
     }
 }

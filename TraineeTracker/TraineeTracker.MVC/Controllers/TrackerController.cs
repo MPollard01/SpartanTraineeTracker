@@ -35,6 +35,19 @@ namespace TraineeTracker.MVC.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Trainer")]
+        public async Task<IActionResult> Trainer(string searchString, string sortOrder,
+            string[] filter, int? pageNumber)
+        {
+            ViewData["Sort"] = sortOrder;
+            ViewData["Search"] = searchString;
+            ViewData["Filter"] = filter;
+
+            var model = await _trackerService
+                .GetTrackersByTrainer(searchString, sortOrder, filter, pageNumber);
+            return View(model);
+        }
+
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Trainees(string searchString, string sortOrder,
             string[] filter, int? pageNumber)

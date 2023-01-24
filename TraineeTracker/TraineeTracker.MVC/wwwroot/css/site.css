@@ -20,3 +20,16 @@ body {
 .spartapink {
     background-color: #cb3158;
 }
+
+.search-input {
+    background-color: #cb3158;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid lightgrey;
+    color: white;
+    width: 300px;
+}
+
+.search-input::placeholder {
+    color: white;
+}

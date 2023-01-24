@@ -6,6 +6,7 @@ namespace TraineeTracker.Application.Contracts.Persistence
     {
         Task<Trainee> GetTraineeWithDetails(string id);
         Task<List<Trainee>> GetTraineesWithDetails();
+        Task<List<Trainee>> GetTraineesWithCourse(string trainerId);
         Task<List<Trainee>> GetTraineesByCourse(int courseId);
     }
 }

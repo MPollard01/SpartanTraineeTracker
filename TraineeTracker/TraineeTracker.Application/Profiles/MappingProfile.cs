@@ -19,6 +19,7 @@ namespace TraineeTracker.Application.Profiles
 
             CreateMap<Trainee, TraineeDto>().ReverseMap();
             CreateMap<Trainee, TraineeDetailDto>().ReverseMap();         
+            CreateMap<Trainee, TraineeCourseDto>().ReverseMap();         
             CreateMap<Trainee, CreateTraineeDto>().ReverseMap();
 
             CreateMap<Tracker, TrackerDto>().ReverseMap();

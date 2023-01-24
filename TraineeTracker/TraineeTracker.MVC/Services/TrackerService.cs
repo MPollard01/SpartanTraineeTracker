@@ -4,6 +4,7 @@ using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
 using TraineeTracker.MVC.Utils;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace TraineeTracker.MVC.Services
 {
@@ -50,17 +51,16 @@ namespace TraineeTracker.MVC.Services
         {
             AddBearerToken();
             var trackers = await _client.TrackerAllAsync(true);
-            var dates = trackers.Select(t => t.StartDate).ToList();
-            date = date ?? trackers.Max(t => t.StartDate);
+            var dates = trackers.Select(t => t.StartDate).ToList();           
+            date = date ?? trackers.Max(t => t.StartDate);           
             var tracker = await _client.TrackerGETByDateAsync(date);
-
+       
             var skills = new List<string> 
                 { "Skilled", "Partially Skilled", "Low Skilled", "Unskilled" };
 
             return new TrackerTraineeVM
             {
                 Tracker = _mapper.Map<TrackerVM>(tracker),
-                Dates = new SelectList(dates, date),
                 Date = date,
                 DateList = dates,
                 CreateTracker = new CreateTrackerVM
@@ -76,15 +76,71 @@ namespace TraineeTracker.MVC.Services
             AddBearerToken();
             var trackers = await _client.TrackerAllAsync(false);
 
-            foreach(var filter in filters)
-            {
-                trackers = trackers.Where(t => t.TechnicalSkill == filter 
-                    || t.ConsultantSkill == filter).ToList();
-            }
+            filterTrackers(ref trackers, filters);
+            searchTrackers(ref trackers, searchString);
+            sortTrackers(ref trackers, sortOrder);
 
+            var trackerVMs = _mapper.Map<List<TrackerListVM>>(trackers);
+
+            return PaginatedList<TrackerListVM>.Create(trackerVMs, pageNumber ?? 1, 10);
+        }
+
+        public async Task<PaginatedList<TrackerListVM>> GetTrackersByTrainer(string searchString, string sortOrder, string[] filters, int? pageNumber)
+        {
+            AddBearerToken();
+            var trackers = await _client.TrackerAllbyTrainerAsync();
+
+            filterTrackers(ref trackers, filters);
+            searchTrackers(ref trackers, searchString);
+            sortTrackers(ref trackers, sortOrder);
+
+            var trackerVMs = _mapper.Map<List<TrackerListVM>>(trackers);
+
+            return PaginatedList<TrackerListVM>.Create(trackerVMs, pageNumber ?? 1, 10);
+        }
+
+        public async Task<TrackerTraineeListVM> GetTraineeTrackers(string searchString, string sortOrder, string[] filters, int? pageNumber)
+        {
+            AddBearerToken();
+            var trackers = await _client.TrackerAllAsync(true);
+
+            filterTrackers(ref trackers, filters);
+            searchTrackers(ref trackers, searchString);
+            sortTrackers(ref trackers, sortOrder);
+
+            var skills = new List<string> 
+                { "Skilled", "Partially Skilled", "Low Skilled", "Unskilled" };
+            var trackerList = _mapper.Map<List<TrackerVM>>(trackers);
+
+            return new TrackerTraineeListVM
+            {
+                Trackers = PaginatedList<TrackerVM>.Create(trackerList, pageNumber ?? 1, 10),
+                CreateTracker = new CreateTrackerVM
+                {
+                    TechnicalSkills = new SelectList(skills),
+                    ConsultantSkills = new SelectList(skills)
+                }
+            };
+        }
+
+        private void filterTrackers(ref ICollection<TrackerListDto> trackers, string[] filters)
+        {
+            if (filters.Length > 0)
+            {
+                trackers = trackers
+                .Where(t => filters
+                .Any(s => s
+                .Equals(t.ConsultantSkill) || s
+                .Equals(t.TechnicalSkill)))
+                .ToList();
+            }
+        }
+
+        private void searchTrackers(ref ICollection<TrackerListDto> trackers, string searchString)
+        {
             if (!string.IsNullOrEmpty(searchString))
             {
-                if(int.TryParse(searchString, out int id))
+                if (int.TryParse(searchString, out int id))
                 {
                     trackers = trackers.Where(t => t.Id == id).ToList();
                 }
@@ -92,9 +148,12 @@ namespace TraineeTracker.MVC.Services
                 {
                     trackers = trackers.Where(u => u.Trainee.FirstName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
                                        || u.Trainee.LastName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                }           
+                }
             }
+        }
 
+        private void sortTrackers(ref ICollection<TrackerListDto> trackers, string sortOrder)
+        {
             switch (sortOrder)
             {
                 case "firstname":
@@ -116,62 +175,6 @@ namespace TraineeTracker.MVC.Services
                     trackers = trackers.OrderBy(t => t.StartDate).ToList();
                     break;
             }
-
-            var trackerVMs = _mapper.Map<List<TrackerListVM>>(trackers);
-
-            return PaginatedList<TrackerListVM>.Create(trackerVMs, pageNumber ?? 1, 10);
-        }
-
-        public async Task<TrackerTraineeListVM> GetTraineeTrackers(string searchString, string sortOrder, string[] filters, int? pageNumber)
-        {
-            AddBearerToken();
-            var trackers = await _client.TrackerAllAsync(true);
-
-            foreach (var filter in filters)
-            {
-                trackers = trackers.Where(t => t.TechnicalSkill == filter
-                    || t.ConsultantSkill == filter).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                if (int.TryParse(searchString, out int id))
-                {
-                    trackers = trackers.Where(t => t.Id == id).ToList();
-                }
-               
-            }
-
-            switch (sortOrder)
-            {
-                case "id":
-                    trackers = trackers.OrderBy(u => u.Id).ToList();
-                    break;
-                case "technical":
-                    trackers = trackers.OrderBy(t => t.TechnicalSkill).ToList();
-                    break;
-                case "consultant":
-                    trackers = trackers.OrderBy(t => t.ConsultantSkill).ToList();
-                    break;
-                case "date":
-                    trackers = trackers.OrderBy(t => t.StartDate).ToList();
-                    break;
-
-            }
-
-            var skills = new List<string> 
-                { "Skilled", "Partially Skilled", "Low Skilled", "Unskilled" };
-            var trackerList = _mapper.Map<List<TrackerVM>>(trackers);
-
-            return new TrackerTraineeListVM
-            {
-                Trackers = PaginatedList<TrackerVM>.Create(trackerList, pageNumber ?? 1, 10),
-                CreateTracker = new CreateTrackerVM
-                {
-                    TechnicalSkills = new SelectList(skills),
-                    ConsultantSkills = new SelectList(skills)
-                }
-            };
         }
     }
 }

@@ -7,6 +7,7 @@ namespace TraineeTracker.MVC.Contracts
     public interface ITrackerService
     {
         Task<PaginatedList<TrackerListVM>> GetTrackers(string searchString, string sortOrder, string[] filter, int? pageNumber);
+        Task<PaginatedList<TrackerListVM>> GetTrackersByTrainer(string searchString, string sortOrder, string[] filter, int? pageNumber);
         Task<TrackerTraineeListVM> GetTraineeTrackers(string searchString, string sortOrder, string[] filter, int? pageNumber);
         Task<TrackerTraineeVM> GetTracker(DateTime? date);
         Task<Response<int>> CreateTracker(CreateTrackerVM trackerVM);
