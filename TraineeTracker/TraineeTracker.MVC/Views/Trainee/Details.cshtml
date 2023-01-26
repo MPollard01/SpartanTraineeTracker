@@ -1,0 +1,58 @@
+﻿@model TraineeVM
+
+@{
+    ViewData["Title"] = "Trainee Details";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>Personal Information</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>ID:</strong> @Model.Id</li>
+                    <li class="list-group-item"><strong>First Name:</strong> @Model.FirstName</li>
+                    <li class="list-group-item"><strong>Last Name:</strong> @Model.LastName</li>
+                    <li class="list-group-item"><strong>Email:</strong> @Model.Email</li>
+                    <li class="list-group-item"><strong>Course:</strong> @Model.Course.Title</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>Trainers</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                    @foreach(var trainer in Model.Trainers)
+                    {
+                        var index = 1;
+                        string collapse = "flush-collapse" + index;
+                        string heading = "flush-heading"+index;
+                        index++;
+                        
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="@index">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@index" aria-expanded="false" aria-controls="@index">
+                                @trainer.FirstName @trainer.LastName
+                                </button>
+                            </h2>
+                            <div id="@index" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#accordionFlushExample">
+                                <div class="accordion-body">
+                                    <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>ID:</strong> @trainer.Id</li>
+                                    <li class="list-group-item"><strong>Email:</strong> @trainer.Email</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>   
+                    }    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

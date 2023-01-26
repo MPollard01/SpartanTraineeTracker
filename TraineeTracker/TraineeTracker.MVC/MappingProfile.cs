@@ -15,6 +15,7 @@ namespace TraineeTracker.MVC
             CreateMap<RegistrationRequest, RegisterVM>().ReverseMap();
 
             CreateMap<TraineeDto, TraineeVM>().ReverseMap();
+            CreateMap<TraineeDetailDto, TraineeVM>().ReverseMap();
             CreateMap<TraineeDto, TraineeListVM>().ReverseMap();
             CreateMap<TraineeCourseDto, TraineesVM>().ReverseMap();
             CreateMap<CreateTraineeDto, RegisterTraineeVM>().ReverseMap();

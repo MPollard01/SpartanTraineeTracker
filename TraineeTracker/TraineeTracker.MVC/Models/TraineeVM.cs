@@ -1,4 +1,5 @@
 ﻿using TraineeTracker.MVC.Services.Base;
+using TraineeTracker.MVC.Utils;
 
 namespace TraineeTracker.MVC.Models
 {
@@ -19,6 +20,12 @@ namespace TraineeTracker.MVC.Models
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public CourseVM Course { get; set; }
+    }
+
+    public class TrainerViewTraineesVM
+    {
+        public PaginatedList<TraineesVM> Trainees { get; set; }
+        public List<string> Courses { get; set; }
     }
 
     public class TraineeListVM : UserListVM

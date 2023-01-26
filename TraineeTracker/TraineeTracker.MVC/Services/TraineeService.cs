@@ -2,6 +2,7 @@
 using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
+using TraineeTracker.MVC.Utils;
 
 namespace TraineeTracker.MVC.Services
 {
@@ -74,6 +75,13 @@ namespace TraineeTracker.MVC.Services
             }
         }
 
+        public async Task<TraineeVM> GetTraineeDetails(string id)
+        {
+            AddBearerToken();
+            var trainee = await _client.TraineeGETAsync(id);
+            return _mapper.Map<TraineeVM>(trainee);
+        }
+
         public async Task<List<TraineeListVM>> GetTrainees()
         {
             AddBearerToken();
@@ -81,12 +89,52 @@ namespace TraineeTracker.MVC.Services
             return _mapper.Map<List<TraineeListVM>>(trainees);
         }
 
-        public async Task<List<TraineesVM>> GetTraineesByTrainer(string searchString, string sortOrder, string[] filters, int? pageNumber)
+        public async Task<TrainerViewTraineesVM> GetTraineesByTrainer(string searchString, string sortOrder, string[] filters, int? pageNumber)
         {
             AddBearerToken();
             var trainees = await _client.TraineeAllByTrainerAsync();
+            var courses = trainees.Select(t => t.Course.Title).Distinct().ToList();
 
-            return _mapper.Map<List<TraineesVM>>(trainees);
+            if(filters.Length > 0)
+                trainees = trainees
+                    .Where(t => filters
+                    .Any(f => t.Course.Title == f))
+                    .ToList();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                    trainees = trainees
+                    .Where(t => t.FirstName
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase) || t.LastName
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase) || t.Course.Title
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase) || t.Id
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "firstname":
+                    trainees = trainees.OrderBy(t => t.FirstName).ToList();
+                    break;
+                case "lastname":
+                    trainees = trainees.OrderBy(t => t.LastName).ToList();
+                    break;
+                case "id":
+                    trainees = trainees.OrderBy(t => t.Id).ToList();
+                    break;
+                case "course":
+                    trainees = trainees.OrderBy(t => t.Course.Title).ToList();
+                    break;
+            }
+
+            var traineeList = _mapper.Map<List<TraineesVM>>(trainees);
+
+            return new TrainerViewTraineesVM
+            {
+                Trainees = PaginatedList<TraineesVM>.Create(traineeList, pageNumber ?? 1, 10),
+                Courses = courses
+            };
         }
     }
 }

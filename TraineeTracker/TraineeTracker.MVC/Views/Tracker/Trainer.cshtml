@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Tracker";
 
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    var prevDisabled = !Model.HasPreviousPage ? "disabled text-white-50" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled text-white-50" : "";
 
     int next = Model.PageIndex + 1;
     int prev = Model.PageIndex - 1;
@@ -20,19 +20,18 @@
 <nav class="navbar justify-content-center gap-5 spartapink p-0">
     <form id="searchForm" class="mx-2" role="search">
         <div class="input-group">
-            @*<button class="btn btn-dark input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>*@
             <input class="search-input" onkeypress="handleSearch(event)" name="searchString" value="@ViewData["Search"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
             <input name="pageNumber" value="@Model.PageIndex" hidden />
             <input name="sortOrder" value="@ViewData["Sort"]" hidden />
         </div>
     </form>
-    <ul class="pagination w-25 justify-content-center m-0">
-        <li class="page-item @prevDisabled"><a class="page-link spartapink border-0" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = prev, filter = filter})"><i class="bi bi-arrow-left"></i></a></li>
+    <ul class="list-unstyled d-flex gap-3 w-25 justify-content-center m-0">
+        <li class="@prevDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = prev, filter = filter})"><i class="bi bi-caret-left-fill"></i></a></li>
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
-            <li class="page-item"><a class="page-link spartapink border-0 @(i == Model.PageIndex ? "text-light": "")" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = i, filter = filter})">@i</a></li>
+            <li class="page-item"><a class="page-link @(i == Model.PageIndex ? "text-white": "text-white-50")" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = i, filter = filter})">@i</a></li>
         }
-        <li class="page-item @nextDisabled"><a class="page-link spartapink border-0" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = next, filter = filter})"><i class="bi bi-arrow-right"></i></a></li>
+        <li class="@nextDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], pageNumber = next, filter = filter})"><i class="bi bi-caret-right-fill"></i></a></li>
     </ul>
 
     <ul class="nav">

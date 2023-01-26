@@ -25,5 +25,11 @@ namespace TraineeTracker.MVC.Controllers
                 .GetTraineesByTrainer(searchString, sortOrder, filter, pageNumber);
             return View(model);
         }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            var model = await _traineeService.GetTraineeDetails(id);
+            return View(model);
+        }
     }
 }

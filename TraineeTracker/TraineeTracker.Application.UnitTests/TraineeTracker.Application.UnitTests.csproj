@@ -28,4 +28,8 @@
     <ProjectReference Include="..\TraineeTracker.Application\TraineeTracker.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Trainees\Commands\" />
+  </ItemGroup>
+
 </Project>

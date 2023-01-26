@@ -18,10 +18,10 @@
 }
 
 <nav class="navbar justify-content-center gap-5 bg-light p-0">
-    <form class="mx-2 w-25" role="search">
+    <form id="searchForm" class="mx-2 w-25" role="search">
         <div class="input-group">
-            <button class="btn btn-secondary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
-            <input class="form-control bg-light rounded-end" name="searchString" value="@ViewData["Search"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
+            
+            <input class="form-control bg-light h-25 rounded-0 border-0 border-bottom my-2" onkeypress="handleSearch(event)" name="searchString" value="@ViewData["Search"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
             <input name="pageNumber" value="@Model.PageIndex" hidden />
             <input name="sortOrder" value="@ViewData["Sort"]" hidden />
         </div>
@@ -155,3 +155,14 @@
 </table>
 
 <script src="~/js/tabs.js"></script>
+
+@section Scripts{
+    <script>
+        function handleSearch(e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                document.getElementById('searchForm').submit();
+            }
+        }
+    </script>
+}
