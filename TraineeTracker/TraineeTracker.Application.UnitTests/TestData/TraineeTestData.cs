@@ -2,9 +2,10 @@
 
 namespace TraineeTracker.Application.UnitTests.TestData
 {
-    public class TraineeTestData
+    public static class TraineeTestData
     {
-        public static List<Trainee> trainees = new List<Trainee>
+
+        public static List<Trainee> trainees => new List<Trainee>
         {
             new Trainee
             {

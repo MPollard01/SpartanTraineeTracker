@@ -5,7 +5,6 @@ using TraineeTracker.Application.Contracts.Persistence;
 using TraineeTracker.Application.DTOs.Trainer;
 using TraineeTracker.Application.Features.Trainers.Handlers.Commands;
 using TraineeTracker.Application.Features.Trainers.Requests.Commands;
-using TraineeTracker.Application.Profiles;
 using TraineeTracker.Application.Responses;
 using TraineeTracker.Application.UnitTests.TestData;
 using TraineeTracker.Domain;
@@ -21,16 +20,10 @@ namespace TraineeTracker.Application.UnitTests.Trainers.Commands
         public CreateTrainerCommandHandlerTests()
         {
             _mockUow = new Mock<IUnitOfWork>();
-            _mapper = new MapperConfiguration(c => c
-                .AddProfile<MappingProfile>())
-                .CreateMapper();
+            _mapper = MapperConfig.Configure();
 
             _mockUow.Setup(uow => uow.TrainerRepository.Add(It.IsAny<Trainer>()))
-                .ReturnsAsync((Trainer trainer) =>
-                {
-                    TrainerTestData.trainers.Add(trainer);
-                    return trainer;
-                });
+                .Callback<Trainer>(t => TrainerTestData.trainers.Add(t));
 
             _mockUow.Setup(uow => uow.TrainerRepository.GetAll())
                 .ReturnsAsync(TrainerTestData.trainers);
@@ -65,14 +58,12 @@ namespace TraineeTracker.Application.UnitTests.Trainers.Commands
         public async Task Handle_GivenTrainerWithExistingId_ReturnsFailedResponse()
         {
             var handle = new CreateTrainerCommandHandler(_mockUow.Object, _mapper);
-            var createTrainerDto = new CreateTrainerDto 
-            { Id = "9e224968-33e4-4652-b7b7-8574d048cdb9" };
-
+           
             _mockUow.Setup(uow => uow.TrainerRepository
-                .Exists(createTrainerDto.Id)).ReturnsAsync(true);
+                .Exists(It.IsAny<string>())).ReturnsAsync(true);
 
             var result = await handle.Handle(new CreateTrainerCommand
-            { TrainerDto = createTrainerDto }, CancellationToken.None);
+            { TrainerDto = _createTrainerDto }, CancellationToken.None);
 
             var trainers = await _mockUow.Object.TrainerRepository.GetAll();
 

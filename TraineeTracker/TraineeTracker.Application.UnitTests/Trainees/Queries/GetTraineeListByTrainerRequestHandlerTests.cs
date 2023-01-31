@@ -23,7 +23,7 @@ namespace TraineeTracker.Application.UnitTests.Trainees.Queries
             _mockTraineeRepo = new Mock<ITraineeRepository>();
             _mapper = MapperConfig.Configure();
             _mockContextAccessor = MockHttpContextAccessor
-                .GetHttpContext(TrainerTestData.trainers[0].Id, TraineeTestData.trainees[0].Email);
+                .GetHttpContext(TrainerTestData.trainers[0].Id, TrainerTestData.trainers[0].Email);
         }
 
         [Fact]
