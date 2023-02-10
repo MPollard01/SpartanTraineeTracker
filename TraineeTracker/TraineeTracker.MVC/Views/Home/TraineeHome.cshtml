@@ -1,0 +1,150 @@
+﻿@model TraineeHomeVM
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="container mt-4">
+    <div class="row gap-3">
+        <div class="col-4 p-0">
+            <div class="card shadow" style="height: 400px">
+                <div class="card-header bg-danger">
+                    <h4 class="text-light">Alerts</h4>
+                </div>
+                <div class="card-body overflow-auto">
+                    @if (!Model.HasThisWeeksTracker)
+                    {
+                        <p class="card-text text-danger" role="alert">
+                            Don't forget to complete this weeks <a class="link-info" asp-controller="Tracker" asp-action="Index">tracker</a>.
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-7 rounded p-3 shadow">
+            <div id="chart3"></div>
+        </div>
+        <div class="col-5 rounded p-3 shadow" style="width: 46%">
+            <div id="chart1"></div>
+        </div>
+        <div class="col-5 rounded p-3 shadow" style="width: 46%">
+            <div id="chart2"></div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        var options1 = {
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            title: {
+                text: 'Consultant Skill Level'
+            },
+            series: [@Model.ConsultantSkillCount[0],
+        @Model.ConsultantSkillCount[1],
+        @Model.ConsultantSkillCount[2],
+        @Model.ConsultantSkillCount[3]],
+            labels: ['Skilled', 'Partially Skilled', 'Low Skilled', 'Unskilled']
+        }
+
+        var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+
+        chart1.render();
+
+        var options2 = {
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            title: {
+                text: 'Technical Skill Level'
+            },
+            series: [@Model.TechnicalSkillCount[0],
+        @Model.TechnicalSkillCount[1],
+        @Model.TechnicalSkillCount[2],
+        @Model.TechnicalSkillCount[3]],
+            labels: ['Skilled', 'Partially Skilled', 'Low Skilled', 'Unskilled']
+        }
+
+        var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+
+        chart2.render();
+
+        $.ajax({
+            type: "GET",
+            url: "https://localhost:7162/api/Tracker?loggedIn=true",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer @Model.Token')
+            },
+            success: renderChart,
+            error: function (request, status, error) {
+                console.log(error)
+            }
+        })
+
+        function convertData(skill) {
+            switch (skill) {
+                case 'Unskilled': return 1
+                    break;
+                case 'Low Skilled': return 2
+                    break;
+                case 'Partially Skilled': return 3
+                    break;
+                case 'Skilled': return 4
+                    break;
+            }
+        }
+
+        function renderChart(data) {
+            const conSkill = data.map(t => t = [new Date(t.startDate).getTime(), convertData(t.consultantSkill)]);
+            const techSkill = data.map(t => t = [new Date(t.startDate).getTime(), convertData(t.technicalSkill)]);
+            var options3 = {
+                chart: {
+                    type: 'line',
+                    height: 350,
+                },
+                title: {
+                    text: 'Skill Progression Over Time'
+                },
+                series: [{
+                    name: 'Consultant Skill',
+                    data: conSkill
+                }, {
+                    name: 'Technical Skill',
+                    data: techSkill
+                }],
+                xaxis: {
+                    type: 'datetime'
+                },
+                yaxis: {
+                    min: "Unskilled",
+                    max: "Skilled",                   
+                    labels: {
+                        minWidth: 60,
+                        formatter: function (value) {
+                            switch (value) {
+                                case 1: return 'Unskilled'
+                                    break;
+                                case 2: return 'Low Skilled'
+                                    break;
+                                case 3: return 'Partially Skilled'
+                                    break;
+                                case 4: return 'Skilled'
+                                    break;
+                              
+                            }
+                        }
+                    },
+                },
+            }
+
+            var chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
+
+            chart3.render();
+
+        }
+    </script>
+}

@@ -41,6 +41,8 @@ namespace TraineeTracker.Persistence.Repositories
                 .Include(t => t.Course)
                 .Include(t => t.Trainers)
                 .ThenInclude(t => t.Trainees)
+                .Include(t => t.Trainers)
+                .ThenInclude(t => t.Courses)
                 .FirstOrDefaultAsync();
         }
     }

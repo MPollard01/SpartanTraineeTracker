@@ -136,5 +136,27 @@ namespace TraineeTracker.MVC.Services
                 Courses = courses
             };
         }
+
+        public async Task<(int[], int[])> GetTraineeSkillCount(string id)
+        {
+            AddBearerToken();
+            var trackers = await _client.TrackerAllByTraineeIdAsync(id);
+            int[] skillCount = new int[4];
+            int[] techSkillCount = new int[4];
+            
+            foreach(var tracker in trackers)
+            {
+                if (tracker.ConsultantSkill == "Skilled") skillCount[0]++;
+                if (tracker.ConsultantSkill == "Partially Skilled") skillCount[1]++;
+                if (tracker.ConsultantSkill == "Low Skilled") skillCount[2]++;
+                if (tracker.ConsultantSkill == "Unskilled") skillCount[3]++;
+                if (tracker.TechnicalSkill == "Skilled") techSkillCount[0]++;
+                if (tracker.TechnicalSkill == "Partially Skilled") techSkillCount[1]++;
+                if (tracker.TechnicalSkill == "Low Skilled") techSkillCount[2]++;
+                if (tracker.TechnicalSkill == "Unskilled") techSkillCount[3]++;
+            }
+
+            return (skillCount, techSkillCount);
+        }
     }
 }

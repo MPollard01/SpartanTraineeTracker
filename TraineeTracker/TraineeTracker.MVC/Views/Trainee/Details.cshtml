@@ -1,7 +1,9 @@
-﻿@model TraineeVM
+﻿@model TraineeAdminViewVM
 
 @{
     ViewData["Title"] = "Trainee Details";
+
+    int index = 1;
 }
 
 <div class="container mt-4">
@@ -12,11 +14,11 @@
                     <h5>Personal Information</h5>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>ID:</strong> @Model.Id</li>
-                    <li class="list-group-item"><strong>First Name:</strong> @Model.FirstName</li>
-                    <li class="list-group-item"><strong>Last Name:</strong> @Model.LastName</li>
-                    <li class="list-group-item"><strong>Email:</strong> @Model.Email</li>
-                    <li class="list-group-item"><strong>Course:</strong> @Model.Course.Title</li>
+                    <li class="list-group-item"><strong>ID:</strong> @Model.Trainee.Id</li>
+                    <li class="list-group-item"><strong>First Name:</strong> @Model.Trainee.FirstName</li>
+                    <li class="list-group-item"><strong>Last Name:</strong> @Model.Trainee.LastName</li>
+                    <li class="list-group-item"><strong>Email:</strong> @Model.Trainee.Email</li>
+                    <li class="list-group-item"><strong>Course:</strong> @Model.Trainee.Course.Title</li>
                 </ul>
             </div>
         </div>
@@ -27,32 +29,83 @@
                 </div>
                 <div class="card-body">
                     <div class="accordion accordion-flush" id="accordionFlushExample">
-                    @foreach(var trainer in Model.Trainers)
-                    {
-                        var index = 1;
+                    @foreach(var trainer in Model.Trainee.Trainers)
+                    {                   
                         string collapse = "flush-collapse" + index;
                         string heading = "flush-heading"+index;
+
                         index++;
-                        
+
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="@index">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@index" aria-expanded="false" aria-controls="@index">
+                            <h2 class="accordion-header" id="@heading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapse" aria-expanded="false" aria-controls="@collapse">
                                 @trainer.FirstName @trainer.LastName
                                 </button>
                             </h2>
-                            <div id="@index" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#accordionFlushExample">
+                            <div id="@collapse" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
                                     <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><strong>ID:</strong> @trainer.Id</li>
-                                    <li class="list-group-item"><strong>Email:</strong> @trainer.Email</li>
+                                        <li class="list-group-item"><strong>ID:</strong> @trainer.Id</li>
+                                        <li class="list-group-item"><strong>Email:</strong> @trainer.Email</li>
+                                        <li class="list-group-item"><strong>Courses:</strong> @string.Join(", ", trainer.Courses.Select(c => c.Title))</li>
+                                        <li class="list-group-item"><strong>Trainees:</strong> @string.Join(", ", trainer.Trainees.Select(t => t.FirstName + " " + t.LastName))</li>
                                     </ul>
                                 </div>
                             </div>
-                        </div>   
+                        </div>
+                          
                     }    
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row mt-4">
+        <div class="col-5 border rounded p-3 shadow-sm me-auto">
+            <div id="chart1"></div>
+        </div>
+        <div class="col-5 border rounded p-3 shadow-sm ms-auto">
+            <div id="chart2"></div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        var options1 = {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Consultant Skill Level'
+            },
+            series: [@Model.ConsultantSkillCount[0], 
+                    @Model.ConsultantSkillCount[1], 
+                    @Model.ConsultantSkillCount[2],
+                    @Model.ConsultantSkillCount[3]],
+            labels: ['Skilled', 'Partially Skilled', 'Low Skilled', 'Unskilled']
+        }
+
+        var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+
+        chart1.render();
+
+        var options2 = {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Technical Skill Level'
+            },
+            series: [@Model.TechSkillCount[0],
+                    @Model.TechSkillCount[1],
+                    @Model.TechSkillCount[2],
+                    @Model.TechSkillCount[3]],
+            labels: ['Skilled', 'Partially Skilled', 'Low Skilled', 'Unskilled']
+        }
+
+        var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+
+        chart2.render();
+    </script>
+}

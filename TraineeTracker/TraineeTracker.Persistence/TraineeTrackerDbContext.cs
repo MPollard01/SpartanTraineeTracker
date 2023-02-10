@@ -41,6 +41,7 @@ namespace TraineeTracker.Persistence
                 .HasMany(c => c.Trainers)
                 .WithMany(c => c.Courses)
                 .UsingEntity<TrainerCourse>();
+
         }
     }
 }

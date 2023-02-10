@@ -83,7 +83,7 @@ namespace TraineeTracker.MVC.Middleware
         private static async Task SignOutAndRedirect(HttpContext httpContext)
         {
             await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            var path = $"/users/login";
+            var path = $"/Account/Login";
             httpContext.Response.Redirect(path);
         }
     }

@@ -21,7 +21,7 @@ namespace TraineeTracker.Application.UnitTests.Trackers.Commands
         private CreateTrackerDto _createTrackerDto;
         public CreateTrackerCommandHandlerTests()
         {
-            _mockUow = new Mock<IUnitOfWork>();
+            _mockUow = new Mock<IUnitOfWork>();          
             _mockUow.Setup(x => x.TrackerRepository.GetAll())
                 .ReturnsAsync(TrackerTestData.trackers);
             _mockUow.Setup(x => x.TrackerRepository.Add(It.IsAny<Tracker>()))
@@ -30,7 +30,7 @@ namespace TraineeTracker.Application.UnitTests.Trackers.Commands
                     TrackerTestData.trackers.Add(t);
                     return t;
                 });
-         
+
             _mapper = MapperConfig.Configure();
             _mockContextAccessor = MockHttpContextAccessor
                 .GetHttpContext(TrainerTestData.trainers[0].Id, TrainerTestData.trainers[0].Email);
@@ -48,7 +48,7 @@ namespace TraineeTracker.Application.UnitTests.Trackers.Commands
 
         [Fact]
         public async Task Handle_WhenCalled_AddsTrackerToRepository()
-        {
+        {         
             var handler = new CreateTrackerCommandHandler(_mockUow.Object, _mapper, _mockContextAccessor.Object);
             var result = await handler.Handle(new CreateTrackerCommand { TrackerDto = _createTrackerDto }, CancellationToken.None);
 
@@ -76,5 +76,7 @@ namespace TraineeTracker.Application.UnitTests.Trackers.Commands
             result.Errors.ShouldNotBeEmpty();
             trackers.Count.ShouldBe(2);
         }
+
+        
     }
 }

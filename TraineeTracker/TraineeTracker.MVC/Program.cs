@@ -24,6 +24,7 @@ builder.Services.AddScoped<ITraineeService, TraineeService>();
 builder.Services.AddScoped<ITrainerService, TrainerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITrackerService, TrackerService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 
 builder.Services.AddControllersWithViews();
 

@@ -33,3 +33,11 @@ body {
 .search-input::placeholder {
     color: white;
 }
+
+.text-green {
+    color: seagreen;
+}
+
+.bg-green {
+    background-color: seagreen;
+}

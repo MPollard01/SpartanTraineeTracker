@@ -2,9 +2,9 @@
 
 namespace TraineeTracker.Application.UnitTests.TestData
 {
-    internal class TrackerTestData
+    public static class TrackerTestData
     {
-        internal static List<Tracker> trackers = new List<Tracker>
+        public static List<Tracker> trackers = new List<Tracker>
         {
             new Tracker
             {

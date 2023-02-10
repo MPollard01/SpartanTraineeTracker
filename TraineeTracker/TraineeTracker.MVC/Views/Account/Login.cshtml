@@ -8,7 +8,7 @@
 <div class="card mx-auto w-50">
     <div class="card-body">
         <h2 class="card-title mb-4">Login</h2>
-        <form asp-action="Login">
+        <form id="form" asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ReturnUrl" />
             <div class="form-group mb-3">
@@ -22,7 +22,11 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <input type="submit" value="Login" class="btn btn-primary w-100" />
+                <input id="btnSubmit" type="submit" value="Login" class="btn btn-primary w-100" />
+                <button id="spinner" class="btn btn-primary w-100" style="display: none" type="button" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                </button>
             </div>
         </form>
     </div>
@@ -30,6 +34,20 @@
 </div>
 
 @section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btnSubmit').click(function () {
+                setTimeout(function () {
+                    if ($('.field-validation-valid').val() === '') {
+                        $('#spinner').css('display', 'block');
+                        $('#btnSubmit').css('display', 'none');
+                    }
+                }, 100);
+                          
+            });
+        });
+    </script>
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

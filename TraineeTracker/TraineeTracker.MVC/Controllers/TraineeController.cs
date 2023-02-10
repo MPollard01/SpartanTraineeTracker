@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TraineeTracker.MVC.Contracts;
+using TraineeTracker.MVC.Models;
 
 namespace TraineeTracker.MVC.Controllers
 {
@@ -28,7 +29,16 @@ namespace TraineeTracker.MVC.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var model = await _traineeService.GetTraineeDetails(id);
+            var trainee = await _traineeService.GetTraineeDetails(id);
+            var skillCount = await _traineeService.GetTraineeSkillCount(id);
+
+            var model = new TraineeAdminViewVM
+            {
+                Trainee = trainee,
+                ConsultantSkillCount = skillCount.Item1,
+                TechSkillCount = skillCount.Item2,
+            };
+
             return View(model);
         }
     }

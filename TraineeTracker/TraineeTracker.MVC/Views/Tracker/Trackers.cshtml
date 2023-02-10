@@ -171,3 +171,9 @@
 </div>
 
 <script src="~/js/tabs.js"></script>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

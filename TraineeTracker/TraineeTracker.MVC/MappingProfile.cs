@@ -9,6 +9,7 @@ namespace TraineeTracker.MVC
         public MappingProfile()
         {
             CreateMap<TrainerDto, TrainerVM>().ReverseMap();
+            CreateMap<TrainerDetailDto, TrainerVM>().ReverseMap();
             CreateMap<TrainerDto, TrainerListVM>().ReverseMap();
             CreateMap<CreateTrainerDto, RegisterTrainerVM>().ReverseMap();
 

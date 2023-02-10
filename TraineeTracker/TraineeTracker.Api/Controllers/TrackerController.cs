@@ -26,6 +26,14 @@ namespace TraineeTracker.Api.Controllers
             return Ok(trackers);
         }
 
+        [HttpGet("traineeId")]
+        [EndpointName("TrackerAllByTraineeId")]
+        public async Task<ActionResult<List<TrackerDto>>> Get(string traineeId)
+        {
+            var trackers = await _mediator.Send(new GetTrackerListByTraineeIdRequest { Id = traineeId });
+            return Ok(trackers);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TrackerDto>> Get(int id)
         {

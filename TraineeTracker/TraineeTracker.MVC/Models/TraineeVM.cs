@@ -10,7 +10,14 @@ namespace TraineeTracker.MVC.Models
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public CourseDto Course { get; set; }
-        public List<TrainerDto> Trainers { get; set; }
+        public List<TrainerForTraineeDetailDto> Trainers { get; set; }
+    }
+
+    public class TraineeAdminViewVM
+    {
+        public TraineeVM Trainee { get; set; }
+        public int[] ConsultantSkillCount { get; set; }
+        public int[] TechSkillCount { get; set; }
     }
 
     public class TraineesVM

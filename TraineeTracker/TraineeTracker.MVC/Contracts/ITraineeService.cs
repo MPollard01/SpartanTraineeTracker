@@ -8,6 +8,7 @@ namespace TraineeTracker.MVC.Contracts
         Task<Response<int>> CreateTrainee(RegisterTraineeVM traineeVM);
         Task<List<TraineeListVM>> GetTrainees();
         Task<TraineeVM> GetTraineeDetails(string id);
+        Task<(int[], int[])> GetTraineeSkillCount(string id);
         Task<TrainerViewTraineesVM> GetTraineesByTrainer(string searchString, string sortOrder, string[] filters, int? pageNumber);
     }
 }
