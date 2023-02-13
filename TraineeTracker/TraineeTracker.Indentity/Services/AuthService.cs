@@ -23,7 +23,26 @@ namespace TraineeTracker.Indentity.Services
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings.Value;
-            _signInManager = signInManager;
+            _signInManager = signInManager;         
+        }
+
+        public async Task<ChangePasswordResponse> ChangePassword(ChangePasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.UserName);
+
+            if (user == null)
+            {
+                throw new Exception($"User with {request.UserName} not found.");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+
+            var response = new ChangePasswordResponse
+            {
+                Succeeded = result.Succeeded, Errors = result.Errors.Select(e => e.Description)
+            };
+
+            return response;
         }
 
         public async Task<AuthResponse> Login(AuthRequest request)

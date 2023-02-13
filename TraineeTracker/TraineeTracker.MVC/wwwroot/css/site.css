@@ -1,3 +1,7 @@
+:root {
+    --sparta-colour: #cb3158;
+}
+
 html {
   font-size: 14px;
 }
@@ -17,8 +21,12 @@ body {
   margin-bottom: 60px;
 }
 
-.spartapink {
-    background-color: #cb3158;
+.bg-sparta {
+    background-color: var(--sparta-colour);
+}
+
+.text-sparta {
+    color: var(--sparta-colour);
 }
 
 .search-input {

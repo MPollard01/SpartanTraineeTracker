@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using System.Reflection;
 using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Middleware;
@@ -25,8 +26,25 @@ builder.Services.AddScoped<ITrainerService, TrainerService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITrackerService, TrackerService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromHours(2);
+});
+
+builder.Services.AddDataProtection()
+            .SetApplicationName("TraineeTracker")
+            .AddKeyManagementOptions(options =>
+            {
+                options.NewKeyLifetime = new TimeSpan(180, 0, 0, 0);
+                options.AutoGenerateKeys = true;
+            });
 
 
 var app = builder.Build();
@@ -50,6 +68,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

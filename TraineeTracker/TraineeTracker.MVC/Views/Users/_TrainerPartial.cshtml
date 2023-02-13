@@ -6,5 +6,5 @@
     <td>@Html.DisplayFor(modelItem => Model.LastName)</td>
     <td>@Html.DisplayFor(modelItem => Model.Email)</td>
     <td>Trainer</td>
-    <td><a class="btn btn-info" asp-action="Details">Details</a></td>
+    <td><a class="btn btn-info" asp-controller="Trainer" asp-action="Details" asp-route-id="@Model.Id">Details</a></td>
 </tr>

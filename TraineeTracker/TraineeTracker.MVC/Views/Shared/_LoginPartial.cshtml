@@ -1,22 +1,40 @@
-﻿<ul class="navbar-nav">
-    @if (User.Identity.IsAuthenticated)
+﻿
+<ul class="navbar-nav">
+    @if(User.IsInRole("Trainee"))
     {
-        
-        <li class="nav-item">
-            <form class="form-inline" method="post" asp-action="Logout" asp-controller="Account" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link ">
-                    Logout
-                </button>
-            </form>
-        </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @User.Identity.Name
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index">My Profile</a></li>
+            <li>
+                <form class="form-inline" method="post" asp-action="Logout" asp-controller="Account" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="dropdown-item">
+                        Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+    }
+    else if(User.Identity.IsAuthenticated)
+    {
+    <li class="nav-item">
+        <form class="form-inline" method="post" asp-action="Logout" asp-controller="Account" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="nav-link btn btn-link ">
+                Logout
+            </button>
+        </form>
+    </li>
     }
     else
     {
-        <li class="nav-item">
+    <li class="nav-item">
 
-            <a class="nav-link" asp-action="Login" asp-controller="Account">
-                Login
-            </a>
-        </li>
+        <a class="nav-link" asp-action="Login" asp-controller="Account">
+            Login
+        </a>
+    </li>
     }
 </ul>

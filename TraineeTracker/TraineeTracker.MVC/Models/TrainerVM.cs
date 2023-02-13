@@ -9,11 +9,12 @@ namespace TraineeTracker.MVC.Models
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
         public List<CourseDto> Courses { get; set; }
-        public List<TraineeDetailDto> Trainees { get; set; }
+        public List<TraineeForTrainerDetailDto> Trainees { get; set; }
     }
 
     public class TrainerListVM : UserListVM
     {
         
     }
+
 }

@@ -7,6 +7,6 @@ namespace TraineeTracker.MVC.Contracts
     {
         Task<Response<int>> CreateTrainer(RegisterTrainerVM trainerVM);
         Task<List<TrainerListVM>> GetTrainers();
-   
+        Task<TrainerVM> GetTrainer(string id);
     }
 }

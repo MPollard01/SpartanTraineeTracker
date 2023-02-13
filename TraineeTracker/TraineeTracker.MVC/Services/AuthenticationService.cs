@@ -23,6 +23,7 @@ namespace TraineeTracker.MVC.Services
             this._httpContextAccessor = httpContextAccessor;
             this._mapper = mapper;
             this._tokenHandler = new JwtSecurityTokenHandler();
+
         }
 
         public async Task<bool> Authenticate(string email, string password)
@@ -41,6 +42,9 @@ namespace TraineeTracker.MVC.Services
                     var login = _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
                     _localStorage.SetStorageValue("token", authenticationResponse.Token);
 
+                    //if (string.IsNullOrWhiteSpace(_httpContextAccessor.HttpContext.Session.GetString("_Name")))
+                    //    _httpContextAccessor.HttpContext.Session.SetString("_Name", email);
+                   
                     return true;
                 }
                 return false;
@@ -69,6 +73,36 @@ namespace TraineeTracker.MVC.Services
             var claims = tokenContent.Claims.ToList();
             claims.Add(new Claim(ClaimTypes.Name, tokenContent.Subject));
             return claims;
+        }
+
+        public async Task<ChangePasswordResponse> ChangePassword(ProfileVM profile)
+        {
+            try
+            {
+                ChangePasswordRequest changePasswordRequest = new()
+                {
+                    UserName = _httpContextAccessor.HttpContext.User.Identity.Name,
+                    CurrentPassword = profile.CurrentPassword,
+                    NewPassword = profile.NewPassword
+                };
+
+                var response = await _client.ChangepasswordAsync(changePasswordRequest);
+
+                if (!response.Succeeded)
+                {
+                    var errors = string.Join(" ", response.Errors);
+                    throw new Exception($"Could Not Change Password: {errors}");
+                }
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new ChangePasswordResponse 
+                { 
+                    Succeeded = false, Errors = new List<string> { e.Message } 
+                };
+            }
         }
     }
 }

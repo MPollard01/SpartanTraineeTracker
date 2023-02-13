@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 using TraineeTracker.Application.DTOs.Trainee;
 using TraineeTracker.Application.Features.Trainees.Requests.Commands;
 using TraineeTracker.Application.Features.Trainees.Requests.Queries;

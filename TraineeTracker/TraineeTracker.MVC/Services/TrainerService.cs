@@ -89,6 +89,13 @@ namespace TraineeTracker.MVC.Services
             }
         }
 
+        public async Task<TrainerVM> GetTrainer(string id)
+        {
+            AddBearerToken();
+            var trainer = await _client.TrainerGETAsync(id);
+            return _mapper.Map<TrainerVM>(trainer);
+        }
+
         public async Task<List<TrainerListVM>> GetTrainers()
         {
             AddBearerToken();

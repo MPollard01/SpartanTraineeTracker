@@ -25,5 +25,11 @@ namespace TraineeTracker.Api.Controllers
         {
             return Ok(await _authenticationService.Register(request, role));
         }
+
+        [HttpPost("changepassword")]
+        public async Task<ActionResult<ChangePasswordResponse>> ChangePassword(ChangePasswordRequest request)
+        {
+            return Ok(await _authenticationService.ChangePassword(request));
+        }
     }
 }

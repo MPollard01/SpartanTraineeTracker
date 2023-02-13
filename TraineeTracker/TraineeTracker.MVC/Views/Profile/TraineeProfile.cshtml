@@ -1,0 +1,64 @@
+﻿@model TraineeVM
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<section class="container mt-4">
+    <div class="row gap-3">
+        <div class="col-4 border rounded d-flex justify-content-center">
+            <div class="text-center my-4">
+                <div class="bg-secondary rounded-circle mb-3 d-flex justify-content-center align-items-center" style="width: 200px; height: 200px">
+                    <i class="bi bi-person-fill text-white" style="font-size: 5em"></i>
+                </div>
+                <h4 class="text-sparta mb-3">@Model.FirstName @Model.LastName</h4>
+                <a class="btn btn-primary">Change Profile Picture</a>
+            </div>
+        </div>
+        <div class="col-7 border rounded">
+            <div class="row" style="margin: 5rem 3rem 3rem 3rem">
+                <h3 class="text-sparta">Profile Information</h3>
+                <div class="col-6 mt-4">
+                    <div class="mb-5">
+                        <strong>First Name: </strong>
+                        @Model.FirstName
+                    </div>
+                    <div class="mb-5">
+                        <strong>Email: </strong>
+                        @Model.Email
+                    </div>
+                </div>
+                <div class="col-6 mt-4">
+                    <div class="mb-5">
+                        <strong>Last Name: </strong>
+                        @Model.LastName
+                    </div>
+                    <div class="mb-5">
+                        <strong>Course: </strong>
+                        @Model.Course.Title
+                    </div>
+                </div>
+                <div class="col-12">
+                    <strong>Trainers: </strong>
+                    <ul class="list-unstyled ms-5">
+                        @foreach (var trainer in Model.Trainers)
+                        {
+                            <li>
+                                <span class="m-3">
+                                    <strong>Name: </strong>@trainer.FirstName @trainer.LastName
+                                </span>
+                                <span>
+                                    <strong>Contact: </strong> @trainer.Email
+                                </span>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+                <div class="col-6 mt-5">
+                    <a class="btn btn-primary" asp-action="ChangePassword" asp-controller="Account">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
