@@ -23,6 +23,12 @@ namespace TraineeTracker.MVC.Controllers
                 return View("TraineeProfile", model);
             }
 
+            if (User.IsInRole("Trainer"))
+            {
+                var model = await _profileService.GetTrainerProfile();
+                return View("Trainer", model);
+            }
+
             return View();
         }
 

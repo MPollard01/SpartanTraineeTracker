@@ -26,5 +26,14 @@ namespace TraineeTracker.MVC.Services
             var trainee = await _client.TraineeGETAsync(id);
             return _mapper.Map<TraineeVM>(trainee);
         }
+
+        public async Task<TrainerVM> GetTrainerProfile()
+        {
+            AddBearerToken();
+            var id = _httpContextAccessor.HttpContext.User.FindFirst(
+                    q => q.Type == CustomClaimTypes.Uid)?.Value;
+            var trainer = await _client.TrainerGETAsync(id);
+            return _mapper.Map<TrainerVM>(trainer);
+        }
     }
 }

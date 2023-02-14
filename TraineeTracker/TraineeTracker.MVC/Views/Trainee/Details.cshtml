@@ -60,14 +60,18 @@
             </div>
         </div>
     </div>
-    <div class="row mt-4">
-        <div class="col-5 border rounded p-3 shadow-sm me-auto">
-            <div id="chart1"></div>
+    @if(Model.TechSkillCount.Any(t => t > 0))
+    {
+        <div class="row mt-4">
+            <div class="col-5 border rounded p-3 shadow-sm me-auto">
+                <div id="chart1"></div>
+            </div>
+            <div class="col-5 border rounded p-3 shadow-sm ms-auto">
+                <div id="chart2"></div>
+            </div>
         </div>
-        <div class="col-5 border rounded p-3 shadow-sm ms-auto">
-            <div id="chart2"></div>
-        </div>
-    </div>
+    }
+    
 </div>
 
 @section Scripts {

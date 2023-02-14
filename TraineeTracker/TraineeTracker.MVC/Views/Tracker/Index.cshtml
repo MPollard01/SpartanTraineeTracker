@@ -5,20 +5,20 @@
 
     string technicalSkillColour, consultantSkillColour;
 
-    if (Model.Tracker.TechnicalSkill == "Skilled")
+    if (Model.Tracker?.TechnicalSkill == "Skilled")
         technicalSkillColour = "bg-success";
-    else if (Model.Tracker.TechnicalSkill == "Partially Skilled")
+    else if (Model.Tracker?.TechnicalSkill == "Partially Skilled")
         technicalSkillColour = "bg-primary";
-    else if (Model.Tracker.TechnicalSkill == "Low Skilled")
+    else if (Model.Tracker?.TechnicalSkill == "Low Skilled")
         technicalSkillColour = "bg-warning";
     else
         technicalSkillColour = "bg-danger";
 
-    if (Model.Tracker.ConsultantSkill == "Skilled")
+    if (Model.Tracker?.ConsultantSkill == "Skilled")
         consultantSkillColour = "bg-success";
-    else if (Model.Tracker.ConsultantSkill == "Partially Skilled")
+    else if (Model.Tracker?.ConsultantSkill == "Partially Skilled")
         consultantSkillColour = "bg-primary";
-    else if (Model.Tracker.ConsultantSkill == "Low Skilled")
+    else if (Model.Tracker?.ConsultantSkill == "Low Skilled")
         consultantSkillColour = "bg-warning";
     else
         consultantSkillColour = "bg-danger";
@@ -28,7 +28,7 @@
     var nextDate = defaultDate;
     var disablePreviousDate = "";
     var disableNextDate = "";
-    var dateIndex = Model.DateList.IndexOf(Model.Date.Value);
+    var dateIndex = Model.Date.HasValue ? Model.DateList.IndexOf(Model.Date.Value) : 0;
 
     if (Model.Date.HasValue && dateIndex > 0)
         previousDate = Model.DateList[dateIndex - 1];
@@ -76,53 +76,65 @@
     <partial name="_CreateTrackerPartial" model="Model.CreateTracker" />
 
     <hr />
-    <h3>Week Start: @Model.Tracker.StartDate.ToShortDateString()</h3>
-    <div class="row mt-4">
-        <div class="col-md-6 col-sm-12">
-            <div class="card mb-4">
-                <div class="card-header bg-sparta text-white border-0 fs-4">
-                    @Html.DisplayNameFor(model => model.Tracker.Start)
+
+    @if(Model.Tracker != null)
+    {
+        <h3>Week Start: @Model.Tracker?.StartDate.ToShortDateString()</h3>
+        <div class="row mt-4">
+            <div class="col-md-6 col-sm-12">
+                <div class="card mb-4">
+                    <div class="card-header bg-sparta text-white border-0 fs-4">
+                        @Html.DisplayNameFor(model => model.Tracker.Start)
+                    </div>
+                    <div class="card-body bg-dark text-white">
+                        <p class="card-text"> @Html.DisplayFor(model => model.Tracker.Start)</p>
+                    </div>
                 </div>
-                <div class="card-body bg-dark text-white">
-                    <p class="card-text"> @Html.DisplayFor(model => model.Tracker.Start)</p>
+                <div class="card mb-4">
+                    <div class="card-header bg-sparta text-white border-0 fs-4">
+                        @Html.DisplayNameFor(model => model.Tracker.Stop)
+                    </div>
+                    <div class="card-body bg-dark text-white">
+                        <p class="card-text"> @Html.DisplayFor(model => model.Tracker.Stop)</p>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header bg-sparta text-white border-0 fs-4">
+                        @Html.DisplayNameFor(model => model.Tracker.Continue)
+                    </div>
+                    <div class="card-body bg-dark text-white">
+                        <p class="card-text"> @Html.DisplayFor(model => model.Tracker.Continue)</p>
+                    </div>
                 </div>
             </div>
-            <div class="card mb-4">
-                <div class="card-header bg-sparta text-white border-0 fs-4">
-                    @Html.DisplayNameFor(model => model.Tracker.Stop)
+            <div class="col-md-6 col-sm-12 gap-5 d-flex flex-column text-center justify-content-center text-white">
+                <div class="card rounded-pill @technicalSkillColour">
+                    <p class="fs-4 fw-bold card-header-pill mt-2">
+                        @Html.DisplayNameFor(model => model.Tracker.TechnicalSkill)
+                    </p>
+                    <p class="fs-4 technicalValue">
+                        @Html.DisplayFor(model => model.Tracker.TechnicalSkill)
+                    </p>
                 </div>
-                <div class="card-body bg-dark text-white">
-                    <p class="card-text"> @Html.DisplayFor(model => model.Tracker.Stop)</p>
-                </div>
-            </div>
-            <div class="card mb-4">
-                <div class="card-header bg-sparta text-white border-0 fs-4">
-                    @Html.DisplayNameFor(model => model.Tracker.Continue)
-                </div>
-                <div class="card-body bg-dark text-white">
-                    <p class="card-text"> @Html.DisplayFor(model => model.Tracker.Continue)</p>
+                <div class="card rounded-pill @consultantSkillColour">
+                    <p class="fs-4 fw-bold card-header-pill mt-2">
+                        @Html.DisplayNameFor(model => model.Tracker.ConsultantSkill)
+                    </p>
+                    <p class="fs-4">
+                        @Html.DisplayFor(model => model.Tracker.ConsultantSkill)
+                    </p>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-12 gap-5 d-flex flex-column text-center justify-content-center text-white">
-            <div class="card rounded-pill @technicalSkillColour">
-                <p class="fs-4 fw-bold card-header-pill mt-2">
-                    @Html.DisplayNameFor(model => model.Tracker.TechnicalSkill)
-                </p>
-                <p class="fs-4 technicalValue">
-                    @Html.DisplayFor(model => model.Tracker.TechnicalSkill)
-                </p>
-            </div>
-            <div class="card rounded-pill @consultantSkillColour">
-                <p class="fs-4 fw-bold card-header-pill mt-2">
-                    @Html.DisplayNameFor(model => model.Tracker.ConsultantSkill)
-                </p>
-                <p class="fs-4">
-                    @Html.DisplayFor(model => model.Tracker.ConsultantSkill)
-                </p>
-            </div>
+    }
+    else
+    {
+        <div class="mt-5 text-center">
+            <h2 class="text-sparta mb-3">Welcome To Your Tracker Menu</h2>
+            <h3 class="text-info">To start tracking your progress, click the plus button to create a new tracker for this week.</h3>
         </div>
-    </div>
+    }
+    
 </div>
 
 <script src="~/js/tabs.js"></script>

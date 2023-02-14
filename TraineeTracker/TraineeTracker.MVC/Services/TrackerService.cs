@@ -51,23 +51,34 @@ namespace TraineeTracker.MVC.Services
         {
             AddBearerToken();
             var trackers = await _client.TrackerAllAsync(true);
+            var skills = new List<string>
+                { "Skilled", "Partially Skilled", "Low Skilled", "Unskilled" };
+            var createTracker = new CreateTrackerVM
+            {
+                TechnicalSkills = new SelectList(skills),
+                ConsultantSkills = new SelectList(skills)
+            };
+
+            if(trackers.Count == 0)
+            {
+                return new TrackerTraineeVM
+                {
+                    Date = date,
+                    DateList = new List<DateTime>(),
+                    CreateTracker = createTracker
+                };
+            }
+
             var dates = trackers.Select(t => t.StartDate).ToList();           
             date = date ?? trackers.Max(t => t.StartDate);           
             var tracker = await _client.TrackerGETByDateAsync(date);
        
-            var skills = new List<string> 
-                { "Skilled", "Partially Skilled", "Low Skilled", "Unskilled" };
-
             return new TrackerTraineeVM
             {
                 Tracker = _mapper.Map<TrackerVM>(tracker),
                 Date = date,
                 DateList = dates,
-                CreateTracker = new CreateTrackerVM
-                {
-                    TechnicalSkills = new SelectList(skills),
-                    ConsultantSkills = new SelectList(skills)
-                }
+                CreateTracker = createTracker
             };
         }
 
