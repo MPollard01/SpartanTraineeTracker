@@ -44,11 +44,13 @@ namespace TraineeTracker.MVC.Models
         [Required]
         public string Continue { get; set; } = null!;
 
+        [DisplayName("Technical Skill")]
         public string TechnicalSkill { get; set; }
 
         [ValidateNever]
         public SelectList TechnicalSkills { get; set; }
 
+        [DisplayName("Consulatant Skill")]
         public string ConsultantSkill { get; set; }
 
         [ValidateNever]

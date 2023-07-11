@@ -8,6 +8,7 @@ using TraineeTracker.Application.Responses;
 
 namespace TraineeTracker.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TrackerController : ControllerBase
@@ -58,6 +59,7 @@ namespace TraineeTracker.Api.Controllers
             return Ok(trackers);
         }
 
+        [Authorize(Roles = "Trainer")]
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateTrackerDto trackerDto)
         {

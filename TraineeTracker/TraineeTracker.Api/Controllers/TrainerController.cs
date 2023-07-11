@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TraineeTracker.Application.DTOs.Trainer;
 using TraineeTracker.Application.Features.Trainers.Requests.Commands;
@@ -7,6 +8,7 @@ using TraineeTracker.Application.Responses;
 
 namespace TraineeTracker.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TrainerController : ControllerBase
@@ -40,6 +42,7 @@ namespace TraineeTracker.Api.Controllers
             return Ok(trainees);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateTrainerDto trainerDto)
         {

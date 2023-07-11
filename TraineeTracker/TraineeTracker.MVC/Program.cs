@@ -18,7 +18,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 
-builder.Services.AddHttpClient<IClient, Client>(c => c.BaseAddress = new Uri("https://localhost:7162"));
+builder.Services.AddHttpClient<IClient, Client>(c => c.BaseAddress = new Uri(builder.Environment.IsDevelopment() ? "http://traineetracker.api": "https://traineetrackerapi.fly.dev"));
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<ITraineeService, TraineeService>();
@@ -30,21 +30,21 @@ builder.Services.AddScoped<IProfileService, ProfileService>();
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromHours(2);
-});
+//builder.Services.AddDistributedMemoryCache();
+//builder.Services.AddSession(options =>
+//{
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//    options.IdleTimeout = TimeSpan.FromHours(2);
+//});
 
-builder.Services.AddDataProtection()
-            .SetApplicationName("TraineeTracker")
-            .AddKeyManagementOptions(options =>
-            {
-                options.NewKeyLifetime = new TimeSpan(180, 0, 0, 0);
-                options.AutoGenerateKeys = true;
-            });
+//builder.Services.AddDataProtection()
+//            .SetApplicationName("TraineeTracker")
+//            .AddKeyManagementOptions(options =>
+//            {
+//                options.NewKeyLifetime = new TimeSpan(180, 0, 0, 0);
+//                options.AutoGenerateKeys = true;
+//            });
 
 
 var app = builder.Build();
@@ -62,14 +62,14 @@ app.UseMiddleware<RequestMiddleware>();
 app.UseCookiePolicy();
 app.UseAuthentication();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseSession();
+//app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

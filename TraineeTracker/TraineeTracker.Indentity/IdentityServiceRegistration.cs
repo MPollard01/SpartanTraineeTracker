@@ -18,10 +18,6 @@ namespace TraineeTracker.Indentity
         {
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
-            services.AddDbContext<TraineeTrackerIdentityDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("TraineeTrackerIdentityConnectionString"),
-                b => b.MigrationsAssembly(typeof(TraineeTrackerIdentityDbContext).Assembly.FullName)));
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TraineeTrackerIdentityDbContext>().AddDefaultTokenProviders();
 

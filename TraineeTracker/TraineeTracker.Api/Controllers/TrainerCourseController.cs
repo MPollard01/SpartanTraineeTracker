@@ -1,11 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using TraineeTracker.Application.DTOs.TrainerCourse;
 using TraineeTracker.Application.Features.TrainerCourses.Requests.Commands;
 using TraineeTracker.Application.Responses;
 
 namespace TraineeTracker.Api.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class TrainerCourseController : ControllerBase

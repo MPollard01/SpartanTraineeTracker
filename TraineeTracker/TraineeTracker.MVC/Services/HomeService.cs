@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using AutoMapper;
+using Newtonsoft.Json;
+using NuGet.Protocol;
 using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
@@ -7,9 +9,11 @@ namespace TraineeTracker.MVC.Services
 {
     public class HomeService : BaseHttpService, IHomeService
     {
-        public HomeService(IClient client, ILocalStorageService localStorage) 
+        private readonly IMapper _mapper;
+        public HomeService(IClient client, ILocalStorageService localStorage, IMapper mapper) 
             : base(client, localStorage)
         {
+            _mapper = mapper;
         }
 
         public async Task<AdminHomeVM> GetAdminHome()
@@ -50,10 +54,10 @@ namespace TraineeTracker.MVC.Services
             GetChartInfo(skillCount, techSkillCount, trackers);
 
             DateTime thisMonday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1);
-            
 
             return new TraineeHomeVM
             {
+                Trackers = _mapper.Map<List<TrackerVM>>(trackers).ToJson(),
                 HasThisWeeksTracker = trackers.Any(t => t.StartDate == thisMonday),
                 ConsultantSkillCount = skillCount,
                 TechnicalSkillCount = techSkillCount,

@@ -10,10 +10,7 @@ namespace TraineeTracker.Persistence
     {
         public static IServiceCollection ConfigurePersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<TraineeTrackerDbContext>(options =>
-               options.UseSqlServer(
-                   configuration.GetConnectionString("TraineeTrackerConnectionString")));
-
+           
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITrackerRepository, TrackerRepository>();

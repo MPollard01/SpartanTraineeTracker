@@ -2,9 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TraineeTracker.Indentity;
 
 #nullable disable
@@ -12,42 +12,41 @@ using TraineeTracker.Indentity;
 namespace TraineeTracker.Indentity.Migrations
 {
     [DbContext(typeof(TraineeTrackerIdentityDbContext))]
-    [Migration("20230106172013_InitMigration")]
-    partial class InitMigration
+    [Migration("20230626145901_InitialIdentityMigration")]
+    partial class InitialIdentityMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
 
@@ -55,21 +54,21 @@ namespace TraineeTracker.Indentity.Migrations
                         new
                         {
                             Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                            ConcurrencyStamp = "b7dcfaa8-d0bd-4c39-b7da-a16799d47dca",
+                            ConcurrencyStamp = "58c9c4c6-eee2-4ee3-86eb-218a142d2608",
                             Name = "Trainee",
                             NormalizedName = "TRAINEE"
                         },
                         new
                         {
                             Id = "cac43a7e-f7bb-4446-baaf-1add431ddbbf",
-                            ConcurrencyStamp = "fde8cd7e-6ecd-49ed-879c-b3e38d4e96e2",
+                            ConcurrencyStamp = "0a73d3ca-2785-4614-bf84-09c1492b4ee8",
                             Name = "Trainer",
                             NormalizedName = "TRAINER"
                         },
                         new
                         {
                             Id = "cbc43a8e-f7bb-4445-baaf-1add431ffbbf",
-                            ConcurrencyStamp = "d602edd3-5907-4b2c-9ce5-f6aff4d8d903",
+                            ConcurrencyStamp = "7174c072-53d7-4ca2-b2bf-ff2ea6d5843e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -79,19 +78,19 @@ namespace TraineeTracker.Indentity.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -104,19 +103,19 @@ namespace TraineeTracker.Indentity.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -128,17 +127,17 @@ namespace TraineeTracker.Indentity.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -150,10 +149,10 @@ namespace TraineeTracker.Indentity.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -192,16 +191,16 @@ namespace TraineeTracker.Indentity.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -211,60 +210,60 @@ namespace TraineeTracker.Indentity.Migrations
             modelBuilder.Entity("TraineeTracker.Indentity.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -273,8 +272,7 @@ namespace TraineeTracker.Indentity.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -283,7 +281,7 @@ namespace TraineeTracker.Indentity.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2e9aec57-6169-49b8-ac8f-a13d7425eb15",
+                            ConcurrencyStamp = "caf0378c-3e06-4fe8-9cb6-bda8cd2ee11a",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -291,9 +289,9 @@ namespace TraineeTracker.Indentity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKkbCqwUb3mzHswN1WpTxC1TwSORDaRA3OziaD912RPs9pmgYjSk+HBGn3oNJ7cKEA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOKlrqxTgvJc1+ovegyD+0FJCLpsP51/jeqQx4UcBTRxfJRyfdaKvxY7xh0CzXsZ6A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f8075e0c-a23f-4734-9bc8-2055adddd912",
+                            SecurityStamp = "e74435c9-6dfe-420c-a818-2ebdbc82b67b",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -301,7 +299,7 @@ namespace TraineeTracker.Indentity.Migrations
                         {
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "adb72ea3-b0dd-496e-a7dc-d66e1961c100",
+                            ConcurrencyStamp = "5ec143e1-13f8-4a7a-a60b-e8fd126cea58",
                             Email = "johndoe@sparta.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -309,9 +307,9 @@ namespace TraineeTracker.Indentity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "JOHNDOE@SPARTA.COM",
                             NormalizedUserName = "JOHNDOE@SPARTA.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIapmSsrzVfUgDCy6SQi1WpcnPdEH9COQ/myw8UeoI2LgGuaelrBAl9XS7CpQrsZtg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEl2rC7FRz3OH7F3kBTCaE9bT89ZJpgwA3Say4L0dSSvKrNm2zHrbCfdK0wyP10/QA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "aa153c26-65a2-4cb8-b39e-6b72f25a76f6",
+                            SecurityStamp = "da8f8663-b5d9-4d85-abc8-55c840473476",
                             TwoFactorEnabled = false,
                             UserName = "johndoe@sparta.com"
                         },
@@ -319,7 +317,7 @@ namespace TraineeTracker.Indentity.Migrations
                         {
                             Id = "0c1518f6-e6bc-4568-b694-e50fb2a3eac1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "83561ba6-560f-4348-8d71-5ab1b6fae86e",
+                            ConcurrencyStamp = "0afb70e4-b8be-443e-a976-90d5e9ce0cd5",
                             Email = "janedoe@sparta.com",
                             EmailConfirmed = true,
                             FirstName = "Jane",
@@ -327,9 +325,9 @@ namespace TraineeTracker.Indentity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "JANEDOE@SPARTA.COM",
                             NormalizedUserName = "JANEDOE@SPARTA.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENWq7kj/DqiO4Yi6jsNY2fLicK9nnx1Ohxu6mTqG2x6eePbfpUfpCYswBX7S5S4FrA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMS/FuxZR8Hk1h/IR5d1t2iR7aLvQrgcKg8ZUDxF44yt3w8lsTOm7AaDY4KbGJUpBw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fb6af015-894b-4b05-8e22-6f1dab4136ce",
+                            SecurityStamp = "e1429985-40b2-4d62-a8ef-a58f52dd9a85",
                             TwoFactorEnabled = false,
                             UserName = "janedoe@sparta.com"
                         },
@@ -337,7 +335,7 @@ namespace TraineeTracker.Indentity.Migrations
                         {
                             Id = "7e6adc8b-0a6e-4970-af0c-18f7fe18336d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3b8d2f34-7d3a-4cde-911a-d33005f6e729",
+                            ConcurrencyStamp = "b414cc72-34d7-4688-8dfa-2a4f2a7d96a9",
                             Email = "carlangle@sparta.com",
                             EmailConfirmed = true,
                             FirstName = "Carl",
@@ -345,9 +343,9 @@ namespace TraineeTracker.Indentity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "CARLANGLE@SPARTA.COM",
                             NormalizedUserName = "CARLANGLE@SPARTA.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBhBPQUKFEBKLHfxa1tnU1QYc3As2Ntno+i45kZyZaDK6yAbbNh0wil41UA4zZsjjg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAED+oWZY36iKwAuLdY+0UHC/IjQAQG2wUlVf90JtsCuVrkY47UAX3PVMUH6qXsR0d0g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "65c89c59-ca8a-4af9-88a8-99f54db157dd",
+                            SecurityStamp = "587bacac-9a62-46c5-94c8-c91c07579a00",
                             TwoFactorEnabled = false,
                             UserName = "carlangle@sparta.com"
                         },
@@ -355,7 +353,7 @@ namespace TraineeTracker.Indentity.Migrations
                         {
                             Id = "2cbdecbb-791e-45c0-93de-51abc9b71859",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e2650609-3c2e-404b-b4df-e4c7cd2ec348",
+                            ConcurrencyStamp = "56fb0eab-1066-4bf1-8bd0-6d76fa3f89b3",
                             Email = "kimsale@sparta.com",
                             EmailConfirmed = true,
                             FirstName = "Kim",
@@ -363,9 +361,9 @@ namespace TraineeTracker.Indentity.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "KIMSALE@SPARTA.COM",
                             NormalizedUserName = "KIMSALE@SPARTA.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGBhwUHV8pbVXdxAN1+F9VPDPeBC0+1lFr/YWvSUNYxKVlxWK59Z+WmpVAXO20Kefg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAMoWqQhX6Nu/tW2NVfT9dWGTCaO/W0tvEdqouxZMwhCspxa9JEl9Gzn/J/wnf/zrA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d48c61b6-8879-4c7f-bef8-a058d34c7df4",
+                            SecurityStamp = "e701d0a2-23b4-4465-b513-654a794b19fe",
                             TwoFactorEnabled = false,
                             UserName = "kimsale@sparta.com"
                         });

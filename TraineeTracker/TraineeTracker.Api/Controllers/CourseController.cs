@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TraineeTracker.Application.DTOs.Course;
 using TraineeTracker.Application.Features.Courses.Requests.Commands;
@@ -32,6 +33,7 @@ namespace TraineeTracker.Api.Controllers
             return Ok(course);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateCourseDto courseDto)
         {

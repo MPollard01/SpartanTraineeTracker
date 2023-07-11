@@ -24,6 +24,7 @@ namespace TraineeTracker.MVC.Models
 
     public class TraineeHomeVM
     {
+        public string Trackers { get; set; }
         public bool HasThisWeeksTracker { get; set; }
         public int[] ConsultantSkillCount { get; set; }
         public int[] TechnicalSkillCount { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TraineeTracker.Indentity.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class InitialIdentityMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,10 +18,10 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,23 +32,23 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,11 +59,11 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,11 +80,11 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ClaimType = table.Column<string>(type: "text", nullable: true),
+                    ClaimValue = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,10 +101,10 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,8 +121,8 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    RoleId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,10 +145,10 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -165,9 +166,9 @@ namespace TraineeTracker.Indentity.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "cac43a6e-f7bb-4448-baaf-1add431ccbbf", "b7dcfaa8-d0bd-4c39-b7da-a16799d47dca", "Trainee", "TRAINEE" },
-                    { "cac43a7e-f7bb-4446-baaf-1add431ddbbf", "fde8cd7e-6ecd-49ed-879c-b3e38d4e96e2", "Trainer", "TRAINER" },
-                    { "cbc43a8e-f7bb-4445-baaf-1add431ffbbf", "d602edd3-5907-4b2c-9ce5-f6aff4d8d903", "Administrator", "ADMINISTRATOR" }
+                    { "cac43a6e-f7bb-4448-baaf-1add431ccbbf", "58c9c4c6-eee2-4ee3-86eb-218a142d2608", "Trainee", "TRAINEE" },
+                    { "cac43a7e-f7bb-4446-baaf-1add431ddbbf", "0a73d3ca-2785-4614-bf84-09c1492b4ee8", "Trainer", "TRAINER" },
+                    { "cbc43a8e-f7bb-4445-baaf-1add431ffbbf", "7174c072-53d7-4ca2-b2bf-ff2ea6d5843e", "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -175,11 +176,11 @@ namespace TraineeTracker.Indentity.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "0c1518f6-e6bc-4568-b694-e50fb2a3eac1", 0, "83561ba6-560f-4348-8d71-5ab1b6fae86e", "janedoe@sparta.com", true, "Jane", "Doe", false, null, "JANEDOE@SPARTA.COM", "JANEDOE@SPARTA.COM", "AQAAAAEAACcQAAAAENWq7kj/DqiO4Yi6jsNY2fLicK9nnx1Ohxu6mTqG2x6eePbfpUfpCYswBX7S5S4FrA==", null, false, "fb6af015-894b-4b05-8e22-6f1dab4136ce", false, "janedoe@sparta.com" },
-                    { "2cbdecbb-791e-45c0-93de-51abc9b71859", 0, "e2650609-3c2e-404b-b4df-e4c7cd2ec348", "kimsale@sparta.com", true, "Kim", "Sale", false, null, "KIMSALE@SPARTA.COM", "KIMSALE@SPARTA.COM", "AQAAAAEAACcQAAAAEGBhwUHV8pbVXdxAN1+F9VPDPeBC0+1lFr/YWvSUNYxKVlxWK59Z+WmpVAXO20Kefg==", null, false, "d48c61b6-8879-4c7f-bef8-a058d34c7df4", false, "kimsale@sparta.com" },
-                    { "7e6adc8b-0a6e-4970-af0c-18f7fe18336d", 0, "3b8d2f34-7d3a-4cde-911a-d33005f6e729", "carlangle@sparta.com", true, "Carl", "Angle", false, null, "CARLANGLE@SPARTA.COM", "CARLANGLE@SPARTA.COM", "AQAAAAEAACcQAAAAEBhBPQUKFEBKLHfxa1tnU1QYc3As2Ntno+i45kZyZaDK6yAbbNh0wil41UA4zZsjjg==", null, false, "65c89c59-ca8a-4af9-88a8-99f54db157dd", false, "carlangle@sparta.com" },
-                    { "8e445865-a24d-4543-a6c6-9443d048cdb9", 0, "2e9aec57-6169-49b8-ac8f-a13d7425eb15", "admin@localhost.com", true, "System", "Admin", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAEAACcQAAAAEKkbCqwUb3mzHswN1WpTxC1TwSORDaRA3OziaD912RPs9pmgYjSk+HBGn3oNJ7cKEA==", null, false, "f8075e0c-a23f-4734-9bc8-2055adddd912", false, "admin@localhost.com" },
-                    { "9e224968-33e4-4652-b7b7-8574d048cdb9", 0, "adb72ea3-b0dd-496e-a7dc-d66e1961c100", "johndoe@sparta.com", true, "John", "Doe", false, null, "JOHNDOE@SPARTA.COM", "JOHNDOE@SPARTA.COM", "AQAAAAEAACcQAAAAEIapmSsrzVfUgDCy6SQi1WpcnPdEH9COQ/myw8UeoI2LgGuaelrBAl9XS7CpQrsZtg==", null, false, "aa153c26-65a2-4cb8-b39e-6b72f25a76f6", false, "johndoe@sparta.com" }
+                    { "0c1518f6-e6bc-4568-b694-e50fb2a3eac1", 0, "0afb70e4-b8be-443e-a976-90d5e9ce0cd5", "janedoe@sparta.com", true, "Jane", "Doe", false, null, "JANEDOE@SPARTA.COM", "JANEDOE@SPARTA.COM", "AQAAAAEAACcQAAAAEMS/FuxZR8Hk1h/IR5d1t2iR7aLvQrgcKg8ZUDxF44yt3w8lsTOm7AaDY4KbGJUpBw==", null, false, "e1429985-40b2-4d62-a8ef-a58f52dd9a85", false, "janedoe@sparta.com" },
+                    { "2cbdecbb-791e-45c0-93de-51abc9b71859", 0, "56fb0eab-1066-4bf1-8bd0-6d76fa3f89b3", "kimsale@sparta.com", true, "Kim", "Sale", false, null, "KIMSALE@SPARTA.COM", "KIMSALE@SPARTA.COM", "AQAAAAEAACcQAAAAEAMoWqQhX6Nu/tW2NVfT9dWGTCaO/W0tvEdqouxZMwhCspxa9JEl9Gzn/J/wnf/zrA==", null, false, "e701d0a2-23b4-4465-b513-654a794b19fe", false, "kimsale@sparta.com" },
+                    { "7e6adc8b-0a6e-4970-af0c-18f7fe18336d", 0, "b414cc72-34d7-4688-8dfa-2a4f2a7d96a9", "carlangle@sparta.com", true, "Carl", "Angle", false, null, "CARLANGLE@SPARTA.COM", "CARLANGLE@SPARTA.COM", "AQAAAAEAACcQAAAAED+oWZY36iKwAuLdY+0UHC/IjQAQG2wUlVf90JtsCuVrkY47UAX3PVMUH6qXsR0d0g==", null, false, "587bacac-9a62-46c5-94c8-c91c07579a00", false, "carlangle@sparta.com" },
+                    { "8e445865-a24d-4543-a6c6-9443d048cdb9", 0, "caf0378c-3e06-4fe8-9cb6-bda8cd2ee11a", "admin@localhost.com", true, "System", "Admin", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAEAACcQAAAAEOKlrqxTgvJc1+ovegyD+0FJCLpsP51/jeqQx4UcBTRxfJRyfdaKvxY7xh0CzXsZ6A==", null, false, "e74435c9-6dfe-420c-a818-2ebdbc82b67b", false, "admin@localhost.com" },
+                    { "9e224968-33e4-4652-b7b7-8574d048cdb9", 0, "5ec143e1-13f8-4a7a-a60b-e8fd126cea58", "johndoe@sparta.com", true, "John", "Doe", false, null, "JOHNDOE@SPARTA.COM", "JOHNDOE@SPARTA.COM", "AQAAAAEAACcQAAAAEEl2rC7FRz3OH7F3kBTCaE9bT89ZJpgwA3Say4L0dSSvKrNm2zHrbCfdK0wyP10/QA==", null, false, "da8f8663-b5d9-4d85-abc8-55c840473476", false, "johndoe@sparta.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -203,8 +204,7 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -230,8 +230,7 @@ namespace TraineeTracker.Indentity.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
         }
 
         /// <inheritdoc />

@@ -73,17 +73,20 @@
 
         chart2.render();
 
-        $.ajax({
-            type: "GET",
-            url: "https://localhost:7162/api/Tracker?loggedIn=true",
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer @Model.Token')
-            },
-            success: renderChart,
-            error: function (request, status, error) {
-                console.log(error)
-            }
-        })
+        //$.ajax({
+        //    type: "GET",           
+        //    url: url,
+        //    beforeSend: function (xhr) {
+        //        xhr.setRequestHeader('Authorization', 'Bearer @Model.Token')
+        //    },
+        //    success: renderChart,
+        //    error: function (request, status, error) {
+        //        console.log(error)
+        //    }
+        //})
+
+        const trackers = JSON.parse('@Model.Trackers'.replaceAll('&quot;','"'))
+        renderChart(trackers)
 
         function convertData(skill) {
             switch (skill) {
@@ -99,8 +102,8 @@
         }
 
         function renderChart(data) {
-            const conSkill = data.map(t => t = [new Date(t.startDate).getTime(), convertData(t.consultantSkill)]);
-            const techSkill = data.map(t => t = [new Date(t.startDate).getTime(), convertData(t.technicalSkill)]);
+            const conSkill = data.map(t => t = [new Date(t.StartDate).getTime(), convertData(t.ConsultantSkill)]);
+            const techSkill = data.map(t => t = [new Date(t.StartDate).getTime(), convertData(t.TechnicalSkill)]);
             var options3 = {
                 chart: {
                     type: 'line',

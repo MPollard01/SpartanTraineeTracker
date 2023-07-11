@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  traineetracker.mvc:
+    image: docker4poll/traineetrackermvc:latest
+    build:
+      context: .
+      dockerfile: TraineeTracker.MVC/Dockerfile
+    ports:
+    - "8080:443"
+
+  traineetracker.api:
+    image: docker4poll/traineetrackerapi:latest
+    depends_on:
+    - traineetracker.mvc
+    build:
+      context: .
+      dockerfile: TraineeTracker.Api/Dockerfile
+    ports:
+    - "5000:80"
+    - "5001:443"

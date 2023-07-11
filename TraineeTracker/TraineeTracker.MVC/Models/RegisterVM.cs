@@ -30,6 +30,7 @@ namespace TraineeTracker.MVC.Models
 
     public class RegisterTrainerVM : RegisterVM
     {
+        [DisplayName("Course")]
         public List<int> CourseIds { get; set; }
 
         [ValidateNever]
@@ -38,6 +39,7 @@ namespace TraineeTracker.MVC.Models
 
     public class RegisterTraineeVM : RegisterVM
     {
+        [DisplayName("Course")]
         public int CourseId { get; set; }
 
         [ValidateNever]

@@ -4,7 +4,6 @@ using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
 using TraineeTracker.MVC.Utils;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace TraineeTracker.MVC.Services
 {
@@ -70,8 +69,8 @@ namespace TraineeTracker.MVC.Services
             }
 
             var dates = trackers.Select(t => t.StartDate).ToList();           
-            date = date ?? trackers.Max(t => t.StartDate);           
-            var tracker = await _client.TrackerGETByDateAsync(date);
+            date ??= trackers.Max(t => t.StartDate);
+            var tracker = trackers.FirstOrDefault(t => t.StartDate == date);
        
             return new TrackerTraineeVM
             {
@@ -157,8 +156,14 @@ namespace TraineeTracker.MVC.Services
                 }
                 else
                 {
-                    trackers = trackers.Where(u => u.Trainee.FirstName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
-                                       || u.Trainee.LastName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+                    trackers = trackers
+                        .Where(u => u.Trainee.FirstName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
+                            || u.Trainee.LastName.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
+                            || u.Start.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
+                            || u.Stop.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
+                            || u.Continue.StartsWith(searchString, StringComparison.OrdinalIgnoreCase)
+                            || u.StartDate.ToShortDateString() == searchString)
+                        .ToList();
                 }
             }
         }
