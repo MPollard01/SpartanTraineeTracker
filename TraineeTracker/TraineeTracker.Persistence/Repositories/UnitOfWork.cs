@@ -14,6 +14,8 @@ namespace TraineeTracker.Persistence.Repositories
         private ITraineeRepository _traineeRepository;
         private ITrainerTraineeRepository _traineeTraineeRepository;
         private ITrainerCourseRepository _trainerCourseRepository;
+        private IQuestionRepository _questionRepository;
+        private ICategoryRepository _categoryRepository;
 
         public UnitOfWork(TraineeTrackerDbContext context, IHttpContextAccessor httpContextAccessor)
         {
@@ -33,6 +35,10 @@ namespace TraineeTracker.Persistence.Repositories
             _traineeTraineeRepository ??= new TrainerTraineeRepository(_context);
         public ITrainerCourseRepository TrainerCourseRepository =>
             _trainerCourseRepository ??= new TrainerCourseRepository(_context);
+        public IQuestionRepository QuestionRepository =>
+            _questionRepository ??= new QuestionRepository(_context);
+        public ICategoryRepository CategoryRepository =>
+            _categoryRepository ??= new CategoryRepository(_context);
 
         public void Dispose()
         {

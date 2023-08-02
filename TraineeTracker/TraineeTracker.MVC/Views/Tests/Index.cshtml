@@ -1,0 +1,17 @@
+﻿@model List<TraineeTracker.MVC.Services.Base.CategoryDto>
+
+@{
+    ViewData["Title"] = "Tests";
+}
+
+<div class="container mt-3" style="height: 80vh">
+    <div class="d-flex h-100" align="center">
+        <div class="col-12 my-auto">
+        @foreach(var category in Model)
+        {
+           <a class="btn btn-lg btn-primary w-50 text-center my-2" asp-action="Type" asp-route-type="@category.Name">@category.Name</a>
+
+        }   
+        </div>
+    </div>
+</div>

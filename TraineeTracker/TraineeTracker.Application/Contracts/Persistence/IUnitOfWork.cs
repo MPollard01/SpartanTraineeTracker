@@ -9,6 +9,8 @@ namespace TraineeTracker.Application.Contracts.Persistence
         ITraineeRepository TraineeRepository { get; }
         ITrainerTraineeRepository TrainerTraineeRepository { get; }
         ITrainerCourseRepository TrainerCourseRepository { get; }
+        IQuestionRepository QuestionRepository { get; }
+        ICategoryRepository CategoryRepository { get; }
         Task Save();
     }
 }

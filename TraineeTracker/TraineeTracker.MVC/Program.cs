@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.DataProtection;
 using System.Reflection;
 using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Middleware;
@@ -18,7 +17,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
 
-builder.Services.AddHttpClient<IClient, Client>(c => c.BaseAddress = new Uri(builder.Environment.IsDevelopment() ? "http://traineetracker.api": "https://traineetrackerapi.fly.dev"));
+builder.Services.AddHttpClient<IClient, Client>(c => c.BaseAddress = new Uri(builder.Environment.IsDevelopment() ? "https://localhost:7162" : "https://traineetrackerapi.fly.dev"));
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 builder.Services.AddScoped<ITraineeService, TraineeService>();
@@ -27,6 +26,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITrackerService, TrackerService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 builder.Services.AddControllersWithViews();
 

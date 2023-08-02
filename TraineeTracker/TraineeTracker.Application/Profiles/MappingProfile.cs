@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
+using TraineeTracker.Application.DTOs.Answer;
+using TraineeTracker.Application.DTOs.Category;
 using TraineeTracker.Application.DTOs.Course;
+using TraineeTracker.Application.DTOs.Option;
+using TraineeTracker.Application.DTOs.Question;
+using TraineeTracker.Application.DTOs.SubCategory;
 using TraineeTracker.Application.DTOs.Tracker;
 using TraineeTracker.Application.DTOs.Trainee;
 using TraineeTracker.Application.DTOs.Trainer;
@@ -35,7 +40,12 @@ namespace TraineeTracker.Application.Profiles
             CreateMap<TrainerTrainee, CreateTrainerTraineeDto>().ReverseMap();
             CreateMap<TrainerCourse, TrainerCourseDto>().ReverseMap();
             CreateMap<TrainerCourse, CreateTrainerCourseDto>().ReverseMap();
-            
+
+            CreateMap<Question, QuestionDto>().ReverseMap();
+            CreateMap<Answer, AnswerDto>().ReverseMap();
+            CreateMap<Option, OptionDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<SubCategory, SubCategoryDto>().ReverseMap();
         }
     }
 }
