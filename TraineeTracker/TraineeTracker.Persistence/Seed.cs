@@ -154,7 +154,7 @@ namespace TraineeTracker.Persistence
                     new Category
                     {
                         Id = 1,
-                        Name = "C#"
+                        Name = "CSharp"
                     }
                 };
 
@@ -349,7 +349,7 @@ namespace TraineeTracker.Persistence
                     {
                         Id= 15,
                         QuestionId= 9,
-                        Value = "IL to native translation",
+                        Value = "IL to Native translation",
                     },
                     new Answer
                     {
@@ -561,31 +561,37 @@ namespace TraineeTracker.Persistence
                     },
                     new Option
                     {
-                        Id= 33,
+                        Id = 33,
+                        QuestionId = 9,
+                        Value = "IL to Native translation",
+                    },
+                    new Option
+                    {
+                        Id= 34,
                         QuestionId = 9,
                         Value = "CAS(Code Access Security)",
                     },
                     new Option
                     {
-                        Id = 34,
+                        Id = 35,
                         QuestionId = 9,
                         Value = "Garbage collection"
                     },
                     new Option
                     {
-                        Id = 35,
+                        Id = 36,
                         QuestionId = 10,
                         Value = "Garbage collector is a feature of CLR which cleans unused managed objects and reclaims memory"
                     },
                     new Option
                     {
-                        Id = 36,
+                        Id = 37,
                         QuestionId = 10,
                         Value = "Garbage collector is a feature of CLR which cleans unmanaged objects and reclaims memory"
                     },
                     new Option
                     {
-                        Id = 37,
+                        Id = 38,
                         QuestionId = 10,
                         Value = "Garbage collector is a feature of CLR which allocates memory to managed objects"
                     }

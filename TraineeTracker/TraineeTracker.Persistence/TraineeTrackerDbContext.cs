@@ -22,6 +22,8 @@ namespace TraineeTracker.Persistence
         public DbSet<Option> Options { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<TraineeTest> TraineeTests { get; set; }
+        public DbSet<TraineeAnswer> TraineeAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

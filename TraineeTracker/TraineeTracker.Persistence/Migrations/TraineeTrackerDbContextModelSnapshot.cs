@@ -285,6 +285,60 @@ namespace TraineeTracker.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("TraineeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TraineeTestId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TraineeTestId");
+
+                    b.ToTable("TraineeAnswers");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeTest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TraineeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("TraineeTests");
+                });
+
             modelBuilder.Entity("TraineeTracker.Domain.Trainer", b =>
                 {
                     b.Property<string>("Id")
@@ -462,6 +516,28 @@ namespace TraineeTracker.Persistence.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeAnswer", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.TraineeTest", "TraineeTest")
+                        .WithMany("Answers")
+                        .HasForeignKey("TraineeTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TraineeTest");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeTest", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubCategory");
+                });
+
             modelBuilder.Entity("TraineeTracker.Domain.TrainerCourse", b =>
                 {
                     b.HasOne("TraineeTracker.Domain.Course", "Course")
@@ -510,6 +586,11 @@ namespace TraineeTracker.Persistence.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("Options");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeTest", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

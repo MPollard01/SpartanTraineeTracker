@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TraineeTracker.Application.DTOs.Question;
 using TraineeTracker.Application.Features.Questions.Requests.Queries;
@@ -7,11 +8,12 @@ namespace TraineeTracker.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestsController : ControllerBase
+    [Authorize]
+    public class QuestionController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public TestsController(IMediator mediator)
+        public QuestionController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -31,6 +33,7 @@ namespace TraineeTracker.Api.Controllers
         }
 
         [HttpGet("count")]
+        [EndpointName("QuestionGETCountAsync")]
         public async Task<ActionResult<int>> GetCount(string category)
         {
             return await _mediator.Send(new GetQuestionCountByCategoryRequest { Category = category });

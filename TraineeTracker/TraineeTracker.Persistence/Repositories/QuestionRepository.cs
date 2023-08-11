@@ -19,6 +19,14 @@ namespace TraineeTracker.Persistence.Repositories
                .FirstOrDefaultAsync();
         }
 
+        public async Task<Question> GetQuestionByCategoryId(int categoryId, int index)
+        {
+            return await _dbContext.Questions
+               .Where(q => q.CategoryId == categoryId)
+               .Skip(index - 1)
+               .FirstOrDefaultAsync();
+        }
+
         public async Task<int> GetQuestionCountByCategory(string category)
         {
             return await _dbContext.Questions

@@ -19,7 +19,7 @@ namespace TraineeTracker.Application.Features.Categories.Handlers.Queries
 
         public async Task<List<CategoryDto>> Handle(GetCategoryListRequest request, CancellationToken cancellationToken)
         {
-            var categories = await _categoryRepository.GetAll();
+            var categories = await _categoryRepository.GetCategoriesWithSubCategories();
             return _mapper.Map<List<CategoryDto>>(categories);
         }
     }

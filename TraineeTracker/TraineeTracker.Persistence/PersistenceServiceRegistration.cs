@@ -22,6 +22,9 @@ namespace TraineeTracker.Persistence
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+            services.AddScoped<IAnswerRepository, AnswerRepository>();
+            services.AddScoped<ITraineeTestRepository, TraineeTestRepository>();
+            services.AddScoped<ITraineeAnswerRepository, TraineeAnswerRepository>();
 
             return services;
         }

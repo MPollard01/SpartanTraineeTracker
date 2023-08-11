@@ -1,0 +1,28 @@
+﻿@model CreateAnswerVM
+@using TraineeTracker.MVC.Services.Base
+
+@{
+    int i = 0;
+}
+
+<form id="AnswerForm" asp-action="CreateAnswer" asp-route-category="@ViewData["Category"]" asp-route-q="@ViewData["nextQuestion"]" asp-route-count="@ViewData["Count"]">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @foreach (var option in (ICollection<OptionDto>)ViewData["Options"])
+    {
+        <div class="form-check my-2">
+            @if ((int)ViewData["AnswerCount"] > 1)
+            {
+                <input class="form-check-input" asp-for="Answers[i]" value="@option.Value" type="checkbox" />
+            }
+            else
+            {
+                <input class="form-check-input" asp-for="Answers[i]" value="@option.Value" type="radio">
+            }
+            <label class="form-check-label">
+                @option.Value
+            </label>
+        </div>
+        i++;
+    }
+    <input type="submit" class="btn btn-primary" value="Submit" />
+</form>

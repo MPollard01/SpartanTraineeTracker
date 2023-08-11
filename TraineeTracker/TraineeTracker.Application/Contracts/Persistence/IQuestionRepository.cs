@@ -9,5 +9,6 @@ namespace TraineeTracker.Application.Contracts.Persistence
         Task<List<Question>> GetQuestionsByCategory(string category);
         Task<List<Question>> GetQuestionsByType(string type);
         Task<int> GetQuestionCountByCategory(string category);
+        Task<Question> GetQuestionByCategoryId(int categoryId, int index);
     }
 }

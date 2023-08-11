@@ -20,6 +20,7 @@
   <ItemGroup>
     <Folder Include="Features\Questions\Handlers\Commands\" />
     <Folder Include="Features\Questions\Requests\Commands\" />
+    <Folder Include="Features\TraineeAnswers\Requests\Commands\" />
     <Folder Include="Features\TrainerCourses\Handlers\Queries\" />
     <Folder Include="Features\TrainerCourses\Requests\Queries\" />
     <Folder Include="Features\TrainerTrainees\Handlers\Queries\" />

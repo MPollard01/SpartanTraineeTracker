@@ -1,16 +1,53 @@
-﻿@model List<TraineeTracker.MVC.Services.Base.CategoryDto>
+﻿@model CategoryListVM
 
 @{
     ViewData["Title"] = "Tests";
 }
 
-<div class="container mt-3" style="height: 80vh">
-    <div class="d-flex h-100" align="center">
-        <div class="col-12 my-auto">
-        @foreach(var category in Model)
+<div class="container mt-3">
+    <div class="alert alert-primary text-center text-info w-75 mx-auto" role="alert">
+        <h1 class="alert-heading">Welcome to the test section</h1>
+        <h2 class="alert-heading">Please choose from one of the following categories</h2>
+    </div>
+    <div class="row">
+        <div class="col-12 w-75 mx-auto text-center">
+        @foreach(var category in Model.Categories)
         {
-           <a class="btn btn-lg btn-primary w-50 text-center my-2" asp-action="Type" asp-route-type="@category.Name">@category.Name</a>
-
+            <div class="card">
+                <div class="card-header">
+                    @category.Name
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach(var sub in category.SubCategories)
+                    {
+                            <li class="list-group-item"><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#testModal" + "@sub.Id">@sub.Name</button></li>
+                        <div class="modal fade" id="testModal" + "@sub.Id" tabindex="-1" aria-labelledby="formModal1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="width: 800px">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title fs-5 text-black">@sub.Name Test</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                       <h4 class="text-danger">You are about to start the @sub.Name test. Make sure you are ready before starting.</h4>
+                                       <form id="@sub.Id" asp-action="CreateTest">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input asp-for="Category.Id" value="@sub.Id" hidden/>
+                                        <input asp-for="Category.Name" value="@sub.Name" hidden/>
+                                       </form>
+                                    </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <input form="@sub.Id" type="submit" class="btn btn-warning" value="Start Test" />
+                                        </div>
+                                </div>
+                                    
+                            </div>
+                            
+                        </div>
+                    }
+                </ul>
+            </div>
         }   
         </div>
     </div>

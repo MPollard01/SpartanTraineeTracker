@@ -1,26 +1,53 @@
 ﻿@model QuestionVM
 
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="pagination pagination-lg">
-                @for(int i = 1; i <= Model.Count; i++)
-                {
-                    string active = i == Model.Index ? "active" : "";
-                    <li class="page-item @active"><a class="page-link" asp-action="Category" asp-route-category="@Context.Request.RouteValues["category"]" asp-route-q="@i">@i</a></li>
-                }
-            </ul>
+@{
+    ViewData["Title"] = $"{Model.Category} Tests";
+    ViewData["Options"] = Model.Question.Options;
+    ViewData["nextQuestion"] = Model.Index + 1;
+    ViewData["Category"] = Model.Category;
+    ViewData["AnswerCount"] = Model.AnswerCount;
+    ViewData["Count"] = Model.Count;
+}
 
-            <h2>@Model.Index @Model.Question.Value</h2>
-            @foreach(var option in Model.Question.Options)
+<div class="container mt-3">
+    <div class="d-flex gap-5 flex-column my-4 align-items-center justify-content-center">       
+        <ul class="pagination pagination-lg">
+            @for(int i = 1; i <= Model.Count; i++)
             {
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                        @option.Value
-                    </label>
-                </div>
+                string active = i == Model.Index ? "active" : "";
+                <li class="page-item @active"><a class="page-link">@i</a></li>
             }
+        </ul>
+        <h5 id="timer" class="text-danger"></h5>
+        <div class="mt-2">
+            <h2 class="my-4">@Model.Index @Model.Question.Value</h2>
+            @if(Model.AnswerCount > 1)
+            {
+                <h3 class="my-3">Select @Model.AnswerCount answers</h3>
+            }
+
+           <partial name="_CreateAnswerPartial" model="Model.Answer" view-data="ViewData" />
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        const destination = new Date().getTime() + 60000;
+
+        const countDown = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = destination - now;
+
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timer").innerHTML = `Time Remaining: ${minutes}:${seconds}`;
+
+            if(distance <= 0) {
+                clearInterval(countDown);
+                document.getElementById("AnswerForm").submit()
+            }
+        })
+    </script>
+}

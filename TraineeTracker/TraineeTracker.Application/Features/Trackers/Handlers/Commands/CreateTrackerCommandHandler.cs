@@ -44,7 +44,7 @@ namespace TraineeTracker.Application.Features.Trackers.Handlers.Commands
 
                 tracker.TraineeId = userId;
                 tracker.StartDate = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1);
-                tracker.CreatedDate = DateTime.Now;
+                tracker.CreatedDate = DateTime.UtcNow;
                 tracker.CreatedBy = userId;
 
                 tracker = await _uow.TrackerRepository.Add(tracker);
