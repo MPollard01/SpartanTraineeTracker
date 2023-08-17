@@ -58,5 +58,14 @@ namespace TraineeTracker.Persistence.Repositories
                 .Include(t => t.Answers)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<TraineeTest> GetTraineeTestWithCategoryByLatestDate(string traineeId)
+        {
+            return await _dbContext.TraineeTests
+                .Where(t => t.TraineeId == traineeId)
+                .OrderByDescending(t => t.CreatedDate)
+                .Include(t => t.SubCategory)
+                .FirstOrDefaultAsync();
+        }
     }
 }

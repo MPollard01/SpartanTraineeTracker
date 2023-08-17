@@ -5,6 +5,7 @@ namespace TraineeTracker.MVC.Models
 {
     public class CreateAnswerVM
     {
+        public int QuestionId { get; set; }
 
         [BindProperty, Required]
         public List<string> Answers { get; set; }

@@ -2,21 +2,18 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TraineeTracker.Persistence;
 
 #nullable disable
 
-namespace TraineeTracker.Persistence.Migrations
+namespace TraineeTracker.Persistence.Migragtions
 {
     [DbContext(typeof(TraineeTrackerDbContext))]
-    [Migration("20230807141736_TraineeTestCategoryToSubCategory")]
-    partial class TraineeTestCategoryToSubCategory
+    partial class TraineeTrackerDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,6 +297,9 @@ namespace TraineeTracker.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("TraineeId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -308,6 +308,8 @@ namespace TraineeTracker.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("TraineeTestId");
 
@@ -521,11 +523,19 @@ namespace TraineeTracker.Persistence.Migrations
 
             modelBuilder.Entity("TraineeTracker.Domain.TraineeAnswer", b =>
                 {
+                    b.HasOne("TraineeTracker.Domain.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TraineeTracker.Domain.TraineeTest", "TraineeTest")
                         .WithMany("Answers")
                         .HasForeignKey("TraineeTestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Question");
 
                     b.Navigation("TraineeTest");
                 });

@@ -18,7 +18,7 @@ namespace TraineeTracker.Persistence
         public DbSet<TrainerTrainee> TrainerTrainee { get; set; }
         public DbSet<TrainerCourse> TrainerCourse { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Answer> Answers { get; set; }
+        public virtual DbSet<Answer> Answers { get; set; }
         public DbSet<Option> Options { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }

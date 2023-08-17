@@ -9,10 +9,10 @@ using TraineeTracker.Persistence;
 
 #nullable disable
 
-namespace TraineeTracker.Persistence.Migrations
+namespace TraineeTracker.Persistence.Migragtions
 {
     [DbContext(typeof(TraineeTrackerDbContext))]
-    [Migration("20230626150938_InitialMigration")]
+    [Migration("20230817145150_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,48 @@ namespace TraineeTracker.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("TraineeTracker.Domain.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("TraineeTracker.Domain.Course", b =>
                 {
@@ -62,6 +104,72 @@ namespace TraineeTracker.Persistence.Migrations
                             Id = 4,
                             Title = "Java SDET"
                         });
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Option", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Options");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.SubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("TraineeTracker.Domain.Tracker", b =>
@@ -180,6 +288,65 @@ namespace TraineeTracker.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TraineeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TraineeTestId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("TraineeTestId");
+
+                    b.ToTable("TraineeAnswers");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeTest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TraineeId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("TraineeTests");
+                });
+
             modelBuilder.Entity("TraineeTracker.Domain.Trainer", b =>
                 {
                     b.Property<string>("Id")
@@ -293,6 +460,48 @@ namespace TraineeTracker.Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TraineeTracker.Domain.Answer", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.Question", "Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Option", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.Question", "Question")
+                        .WithMany("Options")
+                        .HasForeignKey("QuestionId");
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Question", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.SubCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.SubCategory", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.Category", "Category")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("TraineeTracker.Domain.Tracker", b =>
                 {
                     b.HasOne("TraineeTracker.Domain.Trainee", "Trainee")
@@ -313,6 +522,36 @@ namespace TraineeTracker.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeAnswer", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TraineeTracker.Domain.TraineeTest", "TraineeTest")
+                        .WithMany("Answers")
+                        .HasForeignKey("TraineeTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("TraineeTest");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeTest", b =>
+                {
+                    b.HasOne("TraineeTracker.Domain.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("TraineeTracker.Domain.TrainerCourse", b =>
@@ -351,6 +590,23 @@ namespace TraineeTracker.Persistence.Migrations
                     b.Navigation("Trainee");
 
                     b.Navigation("Trainer");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Category", b =>
+                {
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.Question", b =>
+                {
+                    b.Navigation("Answers");
+
+                    b.Navigation("Options");
+                });
+
+            modelBuilder.Entity("TraineeTracker.Domain.TraineeTest", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

@@ -261,14 +261,14 @@ namespace TraineeTracker.Persistence
                     {
                         Id = 2,
                         QuestionId = 2,
-                        Value = ".Net framework is only for windows",
+                        Value = ".NET framework is only for windows",
                         Description = ".NET 5.0 is a unified platform which unifies all .NET runtime like .NET framework, .NET core , Mono and so on."
                     },
                     new Answer
                     {
                         Id = 3,
                         QuestionId = 2,
-                        Value = ".Net core is cross platform",
+                        Value = ".NET core is cross platform",
                         Description = "Developers no longer need to choose between .Net Core, .Net Framework and Mono, based on which platform they’re developing their applications. This provides a common experience to developers irrespective on which .NET version they are working."
                     },
                     new Answer
@@ -282,7 +282,7 @@ namespace TraineeTracker.Persistence
                     {
                         Id = 5,
                         QuestionId = 4,
-                        Value = "IL code is compiled by the Just in time compiler",
+                        Value = "IL code is compiled by the just in time compiler",
                         Description = "IL code is compiled by the JIT compiler also know as the Just in time compiler"
                     },
                     new Answer
@@ -330,25 +330,25 @@ namespace TraineeTracker.Persistence
                     new Answer
                     {
                         Id= 12,
-                        QuestionId= 9,
+                        QuestionId = 9,
                         Value = "Garbage collection",
                     },
                     new Answer
                     {
                         Id= 13,
-                        QuestionId= 9,
-                        Value = "CAS(Code Access security)",
+                        QuestionId = 9,
+                        Value = "CAS(Code Access Security)",
                     },
                     new Answer
                     {
                         Id= 14,
-                        QuestionId= 9,
-                        Value = "CV(Code verification)",
+                        QuestionId = 9,
+                        Value = "CV(Code Verification)",
                     },
                     new Answer
                     {
                         Id= 15,
-                        QuestionId= 9,
+                        QuestionId = 9,
                         Value = "IL to Native translation",
                     },
                     new Answer
@@ -551,7 +551,7 @@ namespace TraineeTracker.Persistence
                     {
                         Id = 31,
                         QuestionId = 9,
-                        Value = "CV(Code verification)",
+                        Value = "CV(Code Verification)",
                     },
                     new Option
                     {

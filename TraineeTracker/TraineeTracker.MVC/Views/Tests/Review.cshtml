@@ -1,0 +1,58 @@
+﻿@model ReviewVM
+
+@{
+    ViewData["Title"] = "Review";
+}
+
+<div class="container mt-3">
+    <div class="d-flex gap-5 flex-column my-4 align-items-center justify-content-center">
+        <ul class="pagination pagination-lg">
+            @for (int i = 1; i <= Model.Count; i++)
+            {
+                string active = i == Model.Index ? "active" : "";
+                <li class="page-item @active"><a class="page-link" asp-action="Review" asp-route-testId="@Model.TestId" asp-route-category="@Model.Category" asp-route-q="@i">@i</a></li>
+            }
+        </ul>
+        <div class="mt-2">
+            <h2 class="my-4">@Model.Index @Model.Question.Value</h2>
+            <ul class="list-group">            
+            @foreach (var option in Model.Question.Options)
+            {
+                if(Model.Answers.Any(x => x.Value == option.Value))
+                {
+                    if(Model.TraineeAnswers.Any(x => x.Answer == option.Value))
+                    {
+                        <li class="list-group-item list-group-item-success">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">@option.Value</div>
+                                @Model.Answers.First(x => x.Value == option.Value).Description
+                            </div>
+                            <i class="bi bi-check-circle h5 text-success float-end"></i>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item list-group-item-success">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">@option.Value</div>
+                                @Model.Answers.First(x => x.Value == option.Value).Description
+                            </div>
+                        </li>
+                    }
+                }
+                else if (Model.TraineeAnswers.Any(x => x.Answer == option.Value))
+                {
+                    <li class="list-group-item list-group-item-danger">
+                        @option.Value
+                        <i class="bi bi-x-circle h5 text-danger float-end"></i>
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item">@option.Value</li>
+                }
+            }
+            </ul>
+        </div>
+    </div>
+</div>

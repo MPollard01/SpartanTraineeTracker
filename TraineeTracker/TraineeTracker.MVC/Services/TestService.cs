@@ -1,5 +1,4 @@
-﻿using TraineeTracker.Domain;
-using TraineeTracker.MVC.Contracts;
+﻿using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
 
@@ -63,6 +62,7 @@ namespace TraineeTracker.MVC.Services
                 Index = index,
                 AnswerCount = answerCount,
                 Category = category,
+                Answer = new CreateAnswerVM { QuestionId = question.Id }
             };
         }
 
@@ -86,7 +86,8 @@ namespace TraineeTracker.MVC.Services
                     var answerDto = new CreateTraineeAnswerDto
                     {
                         Answer = answer,
-                        TraineeTestId = testId
+                        TraineeTestId = testId,
+                        QuestionId = answerVM.QuestionId
                     };
 
                     var apiResponse = await _client.TraineeAnswerAsync(answerDto);
@@ -98,7 +99,7 @@ namespace TraineeTracker.MVC.Services
                         
                         if(answers.Count() <= count)
                         {
-                            // update score
+                            await _client.TraineeTestPUTAsync(testId, apiResponse.Id, q);
                         }
                     }
                     else
@@ -122,7 +123,43 @@ namespace TraineeTracker.MVC.Services
 
         public async Task<int> GetLatestTraineeTestId()
         {
+            AddBearerToken();
             return await _client.TraineeTestGETLatestTestIdAsync();
+        }
+
+        public async Task<ResultVM> GetResult()
+        {
+            AddBearerToken();
+            var test = await _client.TraineeTestGETLatestTestWithCategoryAsync();
+            var count = await _client.AnswerGETCountTotalAsync(test.SubCategory.Id);
+
+            return new ResultVM
+            {
+                TestId = test.Id,
+                Score = test.Score,
+                TestName = test.SubCategory.Name,
+                Total = count
+            };
+        }
+
+        public async Task<ReviewVM> GetReviewVM(int testId, int index, string category)
+        {
+            AddBearerToken();
+            var question = await _client.QuestionAsync(category, index);
+            var traineeAnswers = await _client.TraineeAnswerGETAnswersByQuestionIdAsync(testId, question.Id);
+            var answers = await _client.AnswerAsync(question.Id);
+            int count = await _client.QuestionGETCountAsync(category);
+
+            return new ReviewVM
+            {
+                Question = question,
+                Answers = answers,
+                TraineeAnswers = traineeAnswers,
+                Category = category,
+                Count = count,
+                Index = index,
+                TestId = testId,
+            };
         }
     }
 }

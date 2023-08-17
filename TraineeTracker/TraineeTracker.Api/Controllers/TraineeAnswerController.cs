@@ -28,6 +28,20 @@ namespace TraineeTracker.Api.Controllers
         }
 
         [Authorize(Roles = "Trainee")]
+        [HttpGet("{testId}/{questionId}")]
+        [EndpointName("TraineeAnswerGETAnswersByQuestionId")]
+        public async Task<ActionResult<List<TraineeAnswerDto>>> Get(int testId, int questionId)
+        {
+            var answers = await _mediator
+                .Send(new GetTraineeAnswerListByTestAndQuestionIdRequest
+                {
+                    TestId = testId,
+                    QuestionId = questionId
+                });
+            return Ok(answers);
+        }
+
+        [Authorize(Roles = "Trainee")]
         [HttpPost]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateTraineeAnswerDto answerDto)
         {

@@ -17,6 +17,13 @@ namespace TraineeTracker.Persistence.Repositories
                 .CountAsync();
         }
 
+        public async Task<int> GetAnswerCountByCategoryId(int categoryId)
+        {
+            return await _dbContext.Answers
+                .Where(a => a.Question.CategoryId == categoryId)
+                .CountAsync();
+        }
+
         public async Task<List<Answer>> GetAnswersByCategoryId(int categoryId)
         {
             return await _dbContext.Answers
@@ -35,8 +42,7 @@ namespace TraineeTracker.Persistence.Repositories
         {
             return await _dbContext.Answers
                 .Where(a => a.QuestionId == questionId)
-                .Select(a => a.Value)
-                .ContainsAsync(answer);
+                .AnyAsync(a => a.Value == answer);
         }
     }
 }

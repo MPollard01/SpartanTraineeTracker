@@ -17,10 +17,10 @@
                 <div class="card-header">
                     @category.Name
                 </div>
-                <ul class="list-group list-group-flush">
+                <div class="list-group">
                     @foreach(var sub in category.SubCategories)
                     {
-                            <li class="list-group-item"><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#testModal" + "@sub.Id">@sub.Name</button></li>
+                            <a class="list-group-item list-group-item-action list-group-item-primary" data-bs-toggle="modal" data-bs-target="#testModal" + "@sub.Id">@sub.Name</a>
                         <div class="modal fade" id="testModal" + "@sub.Id" tabindex="-1" aria-labelledby="formModal1" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content" style="width: 800px">
@@ -46,7 +46,7 @@
                             
                         </div>
                     }
-                </ul>
+                </div>
             </div>
         }   
         </div>

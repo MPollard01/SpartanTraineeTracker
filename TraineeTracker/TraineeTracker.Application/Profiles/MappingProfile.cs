@@ -51,6 +51,7 @@ namespace TraineeTracker.Application.Profiles
 
             CreateMap<TraineeTest, TraineeTestDto>().ReverseMap();
             CreateMap<TraineeTest, TraineeTestDetailDto>().ReverseMap();
+            CreateMap<TraineeTest, TraineeTestWithCategoryDto>().ReverseMap();
             CreateMap<TraineeTest, CreateTraineeTestDto>().ReverseMap();
 
             CreateMap<TraineeAnswer, TraineeAnswerDto>().ReverseMap();

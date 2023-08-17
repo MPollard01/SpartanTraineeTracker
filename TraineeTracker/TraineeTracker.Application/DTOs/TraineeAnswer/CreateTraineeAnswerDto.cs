@@ -4,5 +4,6 @@
     {
         public string Answer { get; set; } = null!;
         public int TraineeTestId { get; set; }
+        public int QuestionId { get; set; }
     }
 }

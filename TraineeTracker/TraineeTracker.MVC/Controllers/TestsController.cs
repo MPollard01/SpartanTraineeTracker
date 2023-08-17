@@ -52,34 +52,36 @@ namespace TraineeTracker.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateAnswer(CreateAnswerVM answerVM, string category, int q, int count)
+        public async Task<IActionResult> CreateAnswer(CreateAnswerVM answerVM, string category, int q, int total, int count)
         {
             int testId = await _testService.GetLatestTraineeTestId();
             TempData["TestId"] = testId;
 
             if (ModelState.IsValid)
             {
-                var response = await _testService.CreateAnswer(answerVM, testId, q, count);
+                var response = await _testService.CreateAnswer(answerVM, testId, q-1, count);
                 if (!response.Success)
                     ModelState.AddModelError("", response.ValidationErrors);
             }
 
-            if(q <= count)
+            if(q <= total)
                 return RedirectToAction(nameof(Category), new { category, q });
-
-            return RedirectToAction(nameof(UpdateScore));
-        }
-
-        public async Task<IActionResult> UpdateScore()
-        {
-            if (TempData["TestId"] == null) return BadRequest();
 
             return RedirectToAction(nameof(Result));
         }
 
         public async Task<IActionResult> Result()
         {
-            return View();
+            if (TempData["TestId"] == null) return BadRequest();
+
+            var result = await _testService.GetResult();
+            return View(result);
+        }
+
+        public async Task<IActionResult> Review(int testId, string category, int q)
+        {
+            var model = await _testService.GetReviewVM(testId, q, category);
+            return View(model);
         }
     }
 }

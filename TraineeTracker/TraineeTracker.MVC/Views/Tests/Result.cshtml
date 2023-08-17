@@ -1,5 +1,17 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ResultVM
+
 @{
+    ViewData["Title"] = "Results";
 }
+
+<div class="container mt-3">
+    <div class="alert alert-primary p-4 d-flex justify-content-center" role="alert">
+        <div class="align-items-center">
+            <h1 class="text-success">Results</h1>
+            <h2>Congratulations on completing the @Model.TestName Test</h2>
+            <h3 class="text-warning">You Scored @Model.Score out of @Model.Total</h3>
+            <h4>You can now review the results in detail by clicking the link below</h4>
+            <a class="btn btn-lg btn-warning mt-4" asp-action="Review" asp-route-testId="@Model.TestId" asp-route-category="@Model.TestName" asp-route-q="1">Review</a>
+        </div>
+    </div>
+</div>

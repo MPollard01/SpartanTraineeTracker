@@ -7,6 +7,7 @@ namespace TraineeTracker.Application.Contracts.Persistence
         Task<List<Answer>> GetAnswersByQuestionId(int questionId);
         Task<List<Answer>> GetAnswersByCategoryId(int categoryId);
         Task<int> GetAnswerCountByQuestionId(int questionId);
+        Task<int> GetAnswerCountByCategoryId(int categoryId);
         Task<bool> HasAnswerByQuestionId(int questionId, string answer);
     }
 }

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace TraineeTracker.Persistence.Migrations
+namespace TraineeTracker.Persistence.Migragtions
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration
@@ -14,6 +14,19 @@ namespace TraineeTracker.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Course",
                 columns: table => new
@@ -39,6 +52,26 @@ namespace TraineeTracker.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trainer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,6 +115,48 @@ namespace TraineeTracker.Persistence.Migrations
                         name: "FK_TrainerCourse_Trainer_TrainerId",
                         column: x => x.TrainerId,
                         principalTable: "Trainer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Questions_SubCategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TraineeTests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Score = table.Column<int>(type: "integer", nullable: false),
+                    TraineeId = table.Column<string>(type: "text", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    SubCategoryId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TraineeTests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TraineeTests_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -135,6 +210,74 @@ namespace TraineeTracker.Persistence.Migrations
                         name: "FK_TrainerTrainee_Trainer_TrainerId",
                         column: x => x.TrainerId,
                         principalTable: "Trainer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Answers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    QuestionId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Answers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Options",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    QuestionId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Options", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Options_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TraineeAnswers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Answer = table.Column<string>(type: "text", nullable: false),
+                    TraineeTestId = table.Column<int>(type: "integer", nullable: false),
+                    QuestionId = table.Column<int>(type: "integer", nullable: false),
+                    TraineeId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TraineeAnswers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TraineeAnswers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TraineeAnswers_TraineeTests_TraineeTestId",
+                        column: x => x.TraineeTestId,
+                        principalTable: "TraineeTests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -196,6 +339,26 @@ namespace TraineeTracker.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Answers_QuestionId",
+                table: "Answers",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Options_QuestionId",
+                table: "Options",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_CategoryId",
+                table: "Questions",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_CategoryId",
+                table: "SubCategories",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tracker_TraineeId",
                 table: "Tracker",
                 column: "TraineeId");
@@ -204,6 +367,21 @@ namespace TraineeTracker.Persistence.Migrations
                 name: "IX_Trainee_CourseId",
                 table: "Trainee",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TraineeAnswers_QuestionId",
+                table: "TraineeAnswers",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TraineeAnswers_TraineeTestId",
+                table: "TraineeAnswers",
+                column: "TraineeTestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TraineeTests_SubCategoryId",
+                table: "TraineeTests",
+                column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TrainerCourse_CourseId",
@@ -220,7 +398,16 @@ namespace TraineeTracker.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Answers");
+
+            migrationBuilder.DropTable(
+                name: "Options");
+
+            migrationBuilder.DropTable(
                 name: "Tracker");
+
+            migrationBuilder.DropTable(
+                name: "TraineeAnswers");
 
             migrationBuilder.DropTable(
                 name: "TrainerCourse");
@@ -229,13 +416,25 @@ namespace TraineeTracker.Persistence.Migrations
                 name: "TrainerTrainee");
 
             migrationBuilder.DropTable(
+                name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "TraineeTests");
+
+            migrationBuilder.DropTable(
                 name: "Trainee");
 
             migrationBuilder.DropTable(
                 name: "Trainer");
 
             migrationBuilder.DropTable(
+                name: "SubCategories");
+
+            migrationBuilder.DropTable(
                 name: "Course");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

@@ -43,6 +43,14 @@ namespace TraineeTracker.Api.Controllers
             return Ok(test);
         }
 
+        [HttpGet("LatestTestWithCategory")]
+        [EndpointName("TraineeTestGETLatestTestWithCategory")]
+        public async Task<ActionResult<TraineeTestWithCategoryDto>> GetLatestWithCategory()
+        {
+            var test = await _mediator.Send(new GetTraineeTestWithCategoryByLatestDateRequest());
+            return Ok(test);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Trainee")]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateTraineeTestDto testDto)
@@ -53,6 +61,7 @@ namespace TraineeTracker.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
         [Authorize(Roles = "Trainee")]
         public async Task<ActionResult<Unit>> Put(int id, int traineeAnswerId, int questionNum)
         {

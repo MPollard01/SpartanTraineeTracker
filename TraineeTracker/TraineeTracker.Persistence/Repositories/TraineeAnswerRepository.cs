@@ -16,5 +16,14 @@ namespace TraineeTracker.Persistence.Repositories
                 .Where(x => x.TraineeTestId == traineeTestId)
                 .ToListAsync();
         }
+
+        public async Task<List<TraineeAnswer>> GetTraineeAnswersByTraineeTestIdAndQuestionId(int testId, int questionId, string traineeId)
+        {
+            return await _dbContext.TraineeAnswers
+               .Where(x => x.TraineeTestId == testId && 
+                    x.QuestionId == questionId &&
+                    x.TraineeId == traineeId)
+               .ToListAsync();
+        }
     }
 }
