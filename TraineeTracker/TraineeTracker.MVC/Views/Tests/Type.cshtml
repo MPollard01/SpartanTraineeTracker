@@ -1,14 +1,32 @@
-﻿@model List<TraineeTracker.MVC.Services.Base.SubCategoryDto>
+﻿@model SubCategoryListVM
 
 <div class="container mt-3" style="height: 80vh">
-    <div class="d-flex h-100" align="center">
-        <div class="col-12 my-auto">
-    @foreach (var category in Model)
-    {
-        <a class="btn btn-lg btn-primary w-50 text-center my-2" 
-        asp-action="Category" asp-route-category="@category.Name" 
-        asp-route-q="1">@category.Name</a>      
-    }
-        </div>
+    <div class="list-group list-group-flush shadow">
+        @foreach (var sub in Model.Categories)
+        {
+            <a class="list-group-item list-group-item-action list-group-item-light" data-bs-toggle="modal" data-bs-target="#testModal" + "@sub.Id">@sub.Name</a>
+            <div class="modal fade" id="testModal" + "@sub.Id" tabindex="-1" aria-labelledby="formModal1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="width: 800px">
+                        <div class="modal-header">
+                            <h2 class="modal-title fs-5 text-black">@sub.Name Test</h2>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h4 class="text-danger">You are about to start the @sub.Name test. Make sure you are ready before starting.</h4>
+                            <form id="@sub.Id" asp-action="CreateTest">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input asp-for="Category.Id" value="@sub.Id" hidden />
+                                <input asp-for="Category.Name" value="@sub.Name" hidden />
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input form="@sub.Id" type="submit" class="btn btn-warning" value="Start Test" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>

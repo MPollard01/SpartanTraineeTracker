@@ -1,6 +1,7 @@
 ﻿using TraineeTracker.MVC.Contracts;
 using TraineeTracker.MVC.Models;
 using TraineeTracker.MVC.Services.Base;
+using TraineeTracker.MVC.Utils;
 
 namespace TraineeTracker.MVC.Services
 {
@@ -41,11 +42,43 @@ namespace TraineeTracker.MVC.Services
             }
         }
 
-        public async Task<CategoryListVM> GetCategories()
+        public async Task<CategoryListVM> GetCategories(string searchString, string sortOrder, string[] filters)
         {
             AddBearerToken();
-            var categories = await _client.CategoryAsync();
-            return new CategoryListVM { Categories = categories };
+            IEnumerable<CategoryDetailDto> filterList = await _client.CategoryAsync();
+            IEnumerable<SubCategoryDetailDto> categories = await _client.SubCategoryAsync();
+
+            if(filters.Length > 0)
+            {
+                categories = categories
+                    .Where(c => filters
+                    .Any(x => x == c.Name || x == c.Category.Name));
+
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                categories = categories
+                    .Where(c => c.Name
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase) || c.Category.Name
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            switch (sortOrder)
+            {
+                case "category":
+                    categories = categories.OrderBy(c => c.Name);
+                    break;
+                case "language":
+                    categories = categories.OrderBy(c => c.Category.Name);
+                    break;
+            }
+
+            return new CategoryListVM
+            {
+                SubCategories = categories,
+                FilterList = filterList
+            };
         }
 
         public async Task<QuestionVM> GetQuestionWithCount(string category, int index)
@@ -66,11 +99,11 @@ namespace TraineeTracker.MVC.Services
             };
         }
 
-        public async Task<List<SubCategoryDto>> GetSubCategories(string category)
+        public async Task<SubCategoryListVM> GetSubCategories(string category)
         {
             AddBearerToken();
-            var subs = await _client.SubCategoryAsync(category);
-            return subs.ToList();
+            var subs = await _client.SubCategory2Async(category);
+            return new SubCategoryListVM { Categories = subs };
         }
 
         public async Task<Response<int>> CreateAnswer(CreateAnswerVM answerVM, int testId, int q, int count)
@@ -160,6 +193,61 @@ namespace TraineeTracker.MVC.Services
                 Index = index,
                 TestId = testId,
             };
+        }
+
+        public async Task<ReviewListVM> GetReviewListVM(string searchString, string sortOrder, string[] filters, int? page)
+        {
+            AddBearerToken();
+            IEnumerable<CategoryDetailDto> filterList = await _client.CategoryAsync();
+            IEnumerable<TraineeTestDto> tests = await _client.TraineeTestAllAsync();
+
+            if (filters.Length > 0)
+            {
+                tests = tests
+                    .Where(t => filters
+                    .Any(x => x == t.SubCategory.Name || x == t.SubCategory.Category.Name));
+
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                tests = tests
+                    .Where(t => t.SubCategory.Name
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase) || t.SubCategory.Category.Name
+                    .StartsWith(searchString, StringComparison.OrdinalIgnoreCase));
+            }
+
+            switch (sortOrder)
+            {
+                case "category":
+                    tests = tests.OrderBy(t => t.SubCategory.Name);
+                    break;
+                case "language":
+                    tests = tests.OrderBy(t => t.SubCategory.Category.Name);
+                    break;
+                case "score":
+                    tests = tests.OrderBy(t => t.Score);
+                    break;
+                case "date":
+                    tests = tests.OrderBy(t => t.CreatedDate);
+                    break;
+            }
+
+            var reviewList = new ReviewListVM
+            {
+                Tests = PaginatedList<TraineeTestDto>.Create(tests.ToList(), page ?? 1, 10),
+                Filters = filterList
+            };
+
+            var subs = tests.Select(t => t.SubCategory).DistinctBy(c => c.Id);
+
+            foreach(var category in subs)
+            {
+                int count = await _client.AnswerGETCountTotalAsync(category.Id);
+                reviewList.AnswerCounts.Add(category.Id, count);
+            }
+
+            return reviewList;
         }
     }
 }

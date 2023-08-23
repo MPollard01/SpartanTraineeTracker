@@ -155,6 +155,11 @@ namespace TraineeTracker.Persistence
                     {
                         Id = 1,
                         Name = "CSharp"
+                    },
+                    new Category
+                    {
+                        Id = 2,
+                        Name = "Java"
                     }
                 };
 
@@ -168,7 +173,29 @@ namespace TraineeTracker.Persistence
                     new SubCategory
                     {
                         Id = 1,
-                        Name = ".Net",
+                        Name = ".NET",
+                        Description = ".NET Core, .NET Framework, JIT, CLR, GC",
+                        CategoryId = 1
+                    },
+                    new SubCategory
+                    {
+                        Id = 2,
+                        Name = "Language Basics",
+                        Description = "Syntax, Data types, Reference & Value types, if statements, loops",
+                        CategoryId = 1
+                    },
+                    new SubCategory
+                    {
+                        Id = 3,
+                        Name = "Data Structures",
+                        Description = "Collections, Enumerable, Lists, Arrays, Dictionary, Stacks, Queues",
+                        CategoryId = 1
+                    },
+                    new SubCategory
+                    {
+                        Id = 4,
+                        Name = "Object Oriented Programming",
+                        Description = "Pillars of OOP, Classes, Interfaces",
                         CategoryId = 1
                     }
                 };

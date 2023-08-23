@@ -16,5 +16,12 @@ namespace TraineeTracker.Persistence.Repositories
                 .Where(sc => sc.Category.Name == category)
                 .ToListAsync();
         }
+
+        public async Task<List<SubCategory>> GetSubCategoriesWithCategory()
+        {
+            return await _dbContext.SubCategories
+                .Include(sc => sc.Category)
+                .ToListAsync();
+        }
     }
 }

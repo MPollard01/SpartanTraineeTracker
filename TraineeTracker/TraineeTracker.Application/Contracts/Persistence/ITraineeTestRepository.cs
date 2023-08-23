@@ -10,6 +10,7 @@ namespace TraineeTracker.Application.Contracts.Persistence
         Task<int> GetTraineeTestIdByLatestDate(string traineeId);
         Task<List<TraineeTest>> GetTraineeTestsWithAnswers();
         Task<List<TraineeTest>> GetTraineeTestsWithAnswersByTraineeId(string traineeId);
+        Task<List<TraineeTest>> GetTraineeTestsWithCategoryByTraineeId(string traineeId);
         Task<List<TraineeTest>> GetTraineeTestsWithAnswersByTraineeIdAndCategory(string traineeId, string category);
     }
 }

@@ -19,6 +19,13 @@ namespace TraineeTracker.Api.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<List<SubCategoryDetailDto>>> Get()
+        {
+            var categories = await _mediator.Send(new GetSubCategoryDetailListRequest());
+            return Ok(categories);
+        }
+
+        [HttpGet("{category}")]
         public async Task<ActionResult<List<SubCategoryDto>>> Get(string category)
         {
             var categories = await _mediator.Send(new GetSubCategoryListRequest { Category = category });

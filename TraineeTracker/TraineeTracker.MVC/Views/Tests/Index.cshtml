@@ -2,53 +2,177 @@
 
 @{
     ViewData["Title"] = "Tests";
+
+    string[] filters = (string[])ViewData["Filters"];
+    bool categoryChecked = false;
+    bool subChecked = false;
+
+    bool? isCategorySort = ((string)ViewData["Sort"]) == "category";
+    bool? isLanguageSort = ((string)ViewData["Sort"]) == "language";
 }
 
 <div class="container mt-3">
-    <div class="alert alert-primary text-center text-info w-75 mx-auto" role="alert">
-        <h1 class="alert-heading">Welcome to the test section</h1>
-        <h2 class="alert-heading">Please choose from one of the following categories</h2>
-    </div>
     <div class="row">
-        <div class="col-12 w-75 mx-auto text-center">
-        @foreach(var category in Model.Categories)
-        {
-            <div class="card">
-                <div class="card-header">
-                    @category.Name
-                </div>
-                <div class="list-group">
-                    @foreach(var sub in category.SubCategories)
+        <div class="col-3">
+            <h1>Tests</h1>
+        </div>
+        <div class="col-9">
+            <header class="d-flex justify-content-between align-items-center">              
+                <form id="searchForm" class="mx-2 w-50" role="search">
+                    <div class="input-group">
+                        <button class="btn btn-primary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
+                        @if (!string.IsNullOrEmpty((string)ViewData["Sort"]))
+                        {
+                            <input name="sortOrder" value="@ViewData["Sort"]" hidden />
+                        }
+
+                        <input class="form-control rounded-end" name="searchString" value="@ViewData["Search"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
+                        
+                        @foreach (string filter in filters)
+                        {
+                            <input name="filters" value="@filter" hidden />
+                        }
+                        
+                    </div>
+                </form>
+                <form id="sortForm" class="d-flex align-items-center gap-3">                  
+                    <h5 class="text-primary m-0">Sort By: </h5>
+                    <div>
+                        <input class="form-check-input" name="sortOrder" type="radio" value="category" checked=@isCategorySort
+                               onchange="document.getElementById('sortForm').submit()" />
+                        <label class="form-check-label">Category</label>
+                    </div>
+                    <div>
+                        <input class="form-check-input" name="sortOrder" type="radio" value="language" checked=@isLanguageSort
+                               onchange="document.getElementById('sortForm').submit()" />
+                        <label class="form-check-label">Language</label>
+                    </div>
+                    @if (!string.IsNullOrEmpty((string)ViewData["Search"]))
                     {
-                            <a class="list-group-item list-group-item-action list-group-item-primary" data-bs-toggle="modal" data-bs-target="#testModal" + "@sub.Id">@sub.Name</a>
-                        <div class="modal fade" id="testModal" + "@sub.Id" tabindex="-1" aria-labelledby="formModal1" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content" style="width: 800px">
-                                    <div class="modal-header">
-                                        <h2 class="modal-title fs-5 text-black">@sub.Name Test</h2>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                       <h4 class="text-danger">You are about to start the @sub.Name test. Make sure you are ready before starting.</h4>
-                                       <form id="@sub.Id" asp-action="CreateTest">
-                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <input asp-for="Category.Id" value="@sub.Id" hidden/>
-                                        <input asp-for="Category.Name" value="@sub.Name" hidden/>
-                                       </form>
-                                    </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input form="@sub.Id" type="submit" class="btn btn-warning" value="Start Test" />
-                                        </div>
-                                </div>
-                                    
-                            </div>
-                            
-                        </div>
+                        <input name="searchString" value="@ViewData["Search"]" hidden />
                     }
+                    @foreach(string filter in filters)
+                    {
+                        <input name="filters" value="@filter" hidden />
+                    }
+                                  
+                </form>
+
+            </header>
+        </div>
+    </div>
+    <hr />
+    <main class="row mt-4">
+        <aside class="col-3">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <h3 class="text-primary">Filters</h3>
+                </li>
+                <form id="filterForm" method="get">
+                @foreach(var category in Model.FilterList)
+                {
+                    categoryChecked = filters.Contains(category.Name);
+                    
+                    <li class="list-group-item">
+                        <input class="form-check-input" type="checkbox" name="filters" checked=@categoryChecked value="@category.Name"
+                           onchange="document.getElementById('filterForm').submit()" />
+                        <label class="form-check-label h5">@category.Name</label>
+                        @foreach(var sub in category.SubCategories)
+                        {
+                            subChecked = filters.Contains(sub.Name);
+                            <div class="ms-3 my-1">
+                                <input class="form-check-input" type="checkbox" name="filters" checked=@subChecked value="@sub.Name"
+                               onchange="document.getElementById('filterForm').submit()" />
+                                <label class="form-check-label">@sub.Name</label>
+                            </div>
+                        }
+                    </li>                 
+                }
+                @if (!string.IsNullOrEmpty((string)ViewData["Search"]))
+                {
+                <input name="searchString" value="@ViewData["Search"]" hidden />
+                }
+                @if (!string.IsNullOrEmpty((string)ViewData["Sort"]))
+                {
+                <input name="sortOrder" value="@ViewData["Sort"]" hidden />
+                }
+                </form>
+            </ul>
+        </aside>
+        <section class="col-9">
+            <table class="table bg-sparta text-white table-hover">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Language</th>
+                    </tr>
+                </thead>
+                <tbody class="table-dark">
+   
+                        @foreach(var sub in Model.SubCategories)
+                        {
+                            <tr>
+                                <td><a class="link-warning text-decoration-none" data-bs-toggle="modal" data-bs-target="#testModal-@sub.Id" href="#">@sub.Name</a></td>
+                                <td>@sub.Description</td>
+                                <td><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/@sub.Category.Name.ToLower()/@sub.Category.Name.ToLower()-original.svg" style="height: 40px; width: 40px" /></td>
+                            </tr>
+                        }
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<!--Modals-->
+@*@foreach(var category in Model.Categories)
+{
+    @foreach(var sub in category.SubCategories)
+    {
+        <div class="modal fade" id="testModal-@sub.Id" tabindex="-1" aria-labelledby="formModal-@sub.Id" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width: 800px">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5 text-black">@sub.Name Test</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="text-danger">You are about to start the @sub.Name test. Make sure you are ready before starting.</h4>
+                        <form id="form-@sub.Id" asp-action="CreateTest">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input asp-for="Category.Id" value="@sub.Id" hidden />
+                            <input asp-for="Category.Name" value="@sub.Name" hidden />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input form=form-@sub.Id type="submit" class="btn btn-warning" value="Start Test" />
+                    </div>
                 </div>
             </div>
-        }   
+        </div>
+    }
+}*@
+
+<div class="modal fade" id="testModal-1" tabindex="-1" aria-labelledby="formModal-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5 text-black">.NET Test</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-danger">You are about to start the .NET test. Make sure you are ready before starting.</h4>
+                <form id="form-1" asp-action="CreateTest">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Category.Id" value="1" hidden />
+                    <input asp-for="Category.Name" value=".NET" hidden />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input form=form-1 type="submit" class="btn btn-warning" value="Start Test" />
+            </div>
         </div>
     </div>
 </div>

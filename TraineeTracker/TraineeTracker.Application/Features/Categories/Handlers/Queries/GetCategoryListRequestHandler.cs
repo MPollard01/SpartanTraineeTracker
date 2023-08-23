@@ -6,7 +6,7 @@ using TraineeTracker.Application.Features.Categories.Requests.Queries;
 
 namespace TraineeTracker.Application.Features.Categories.Handlers.Queries
 {
-    public class GetCategoryListRequestHandler : IRequestHandler<GetCategoryListRequest, List<CategoryDto>>
+    public class GetCategoryListRequestHandler : IRequestHandler<GetCategoryListRequest, List<CategoryDetailDto>>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -17,10 +17,10 @@ namespace TraineeTracker.Application.Features.Categories.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<List<CategoryDto>> Handle(GetCategoryListRequest request, CancellationToken cancellationToken)
+        public async Task<List<CategoryDetailDto>> Handle(GetCategoryListRequest request, CancellationToken cancellationToken)
         {
             var categories = await _categoryRepository.GetCategoriesWithSubCategories();
-            return _mapper.Map<List<CategoryDto>>(categories);
+            return _mapper.Map<List<CategoryDetailDto>>(categories);
         }
     }
 }

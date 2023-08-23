@@ -17,9 +17,13 @@ namespace TraineeTracker.MVC.Controllers
         }
 
         [Route("/Tests")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string[] filters)
         {
-            var model = await _testService.GetCategories();
+            ViewData["Sort"] = sortOrder;
+            ViewData["Search"] = searchString;
+            ViewData["Filters"] = filters;
+
+            var model = await _testService.GetCategories(searchString, sortOrder, filters);
             return View(model);
         }
 
@@ -42,11 +46,11 @@ namespace TraineeTracker.MVC.Controllers
         }
 
         [Route("/Tests/{category}")]
-        public async Task<IActionResult> Category(string category, int q)
+        public async Task<IActionResult> Category(string category, int? q)
         {
             if(TempData["TestId"] == null) return BadRequest();
 
-            var model = await _testService.GetQuestionWithCount(category, q);
+            var model = await _testService.GetQuestionWithCount(category, q ?? 1);
             return View(model);
         }
 
@@ -78,9 +82,19 @@ namespace TraineeTracker.MVC.Controllers
             return View(result);
         }
 
-        public async Task<IActionResult> Review(int testId, string category, int q)
+        public async Task<IActionResult> Review(int testId, string category, int? q)
         {
-            var model = await _testService.GetReviewVM(testId, q, category);
+            var model = await _testService.GetReviewVM(testId, q ?? 1, category);
+            return View(model);
+        }
+
+        public async Task<IActionResult> Reviews(string searchString, string sortOrder, string[] filters, int? page)
+        {
+            ViewData["Sort"] = sortOrder;
+            ViewData["Search"] = searchString;
+            ViewData["Filters"] = filters;
+
+            var model = await _testService.GetReviewListVM(searchString, sortOrder, filters, page);
             return View(model);
         }
     }

@@ -1,0 +1,130 @@
+﻿@model ReviewListVM
+
+@{
+    ViewData["Title"] = "Reviews";
+
+    string prevDisabled = !Model.Tests.HasPreviousPage ? "disabled" : "";
+    string nextDisabled = !Model.Tests.HasNextPage ? "disabled" : "";
+
+    int next = Model.Tests.PageIndex + 1;
+    int prev = Model.Tests.PageIndex - 1;
+
+    string[] filters = (string[])ViewData["Filters"];
+    bool categoryChecked = false;
+    bool subChecked = false;
+}
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-3">
+            <h1>Reviews</h1>
+        </div>
+        <div class="col-9">
+            <header class="d-flex justify-content-between align-items-center">
+                <form id="searchForm" class="mx-2 w-50" role="search">
+                    <div class="input-group">
+                        <button class="btn btn-primary input-group-text" id="addon" type="submit"><i class="bi bi-search"></i></button>
+                        @if (!string.IsNullOrEmpty((string)ViewData["Sort"]))
+                        {
+                            <input name="sortOrder" value="@ViewData["Sort"]" hidden />
+                        }
+                        <input class="form-control rounded-end" name="searchString" value="@ViewData["Search"]" type="search" placeholder="Search" aria-label="Search" aria-describedby="addon">
+
+                        @foreach (string filter in filters)
+                        {
+                            <input name="filters" value="@filter" hidden />
+                        }
+                        
+                    </div>
+                </form>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort By
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "category" ? "bg-primary text-white": "")" href="@Url.Page("", new {sortOrder = "category", searchString = ViewData["Search"], page = Model.Tests.PageIndex, filters = filters})">Category</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "language" ? "bg-primary text-white": "")" href="@Url.Page("", new {sortOrder = "language", searchString = ViewData["Search"], page = Model.Tests.PageIndex, filters = filters})">Language</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "date" ? "bg-primary text-white": "")" href="@Url.Page("", new {sortOrder = "date", searchString = ViewData["Search"], page = Model.Tests.PageIndex, filters = filters})">Date</a></li>
+                        <li><a class="dropdown-item @((string)ViewData["Sort"] == "score" ? "bg-primary text-white": "")" href="@Url.Page("", new {sortOrder = "score", searchString = ViewData["Search"], page = Model.Tests.PageIndex, filters = filters})">Score</a></li>
+                    </ul>
+                </div>
+            </header>
+        </div>
+    </div>
+    <hr />
+    <main class="row mt-4">
+        <aside class="col-3">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <h3 class="text-primary">Filters</h3>
+                </li>
+                <form id="filterForm" method="get">
+                    @if (!string.IsNullOrEmpty((string)ViewData["Sort"]))
+                    {
+                        <input name="sortOrder" value="@ViewData["Sort"]" hidden />
+                    }
+                    @if (!string.IsNullOrEmpty((string)ViewData["Search"]))
+                    {
+                    <input name="searchString" value="@ViewData["Search"]" hidden />
+                    }
+                    
+                    <input name="page" value="@Model.Tests.PageIndex" hidden />
+
+                    @foreach (var category in Model.Filters)
+                    {
+                        categoryChecked = filters.Contains(category.Name);
+
+                    <li class="list-group-item">
+                        <input class="form-check-input" type="checkbox" name="filters" checked=@categoryChecked value="@category.Name"
+                           onchange="document.getElementById('filterForm').submit()" />
+                        <label class="form-check-label h5">@category.Name</label>
+                            @foreach (var sub in category.SubCategories)
+                            {
+                                subChecked = filters.Contains(sub.Name);
+                            <div class="ms-3 my-1">
+                                <input class="form-check-input" type="checkbox" name="filters" checked=@subChecked value="@sub.Name"
+                               onchange="document.getElementById('filterForm').submit()" />
+                                <label class="form-check-label">@sub.Name</label>
+                            </div>
+                            }
+                    </li>
+                    }
+                    
+                </form>
+            </ul>
+        </aside>
+        <section class="col-9 position-relative" style="min-height: 60vh">
+            <table class="table bg-sparta text-white table-hover">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Language</th>
+                    </tr>
+                </thead>
+                <tbody class="table-dark">
+
+                    @foreach (var test in Model.Tests)
+                    {
+                        <tr>
+                            <td><a class="link-warning text-decoration-none" asp-action="Review" asp-route-testId="@test.Id" asp-route-category="@test.SubCategory.Name">@test.SubCategory.Name</a></td>
+                            <td>@test.CreatedDate.ToShortDateString()</td>
+                            <td>@test.Score out of @Model.AnswerCounts[test.SubCategory.Id]</td>
+                            <td><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/@test.SubCategory.Category.Name.ToLower()/@test.SubCategory.Category.Name.ToLower()-original.svg" style="height: 40px; width: 40px" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <ul class="pagination position-absolute bottom-0 start-50">
+                <li class="page-item @prevDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], page = prev, filters = filters})"><i class="bi bi-arrow-left"></i></a></li>
+                @for (int i = 1; i <= Model.Tests.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.Tests.PageIndex ? "active": "")"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], page = i, filters = filters})">@i</a></li>
+                }
+                <li class="page-item @nextDisabled"><a class="page-link" href="@Url.Page("", new {sortOrder = ViewData["Sort"], searchString = ViewData["Search"], page = next, filters = filters})"><i class="bi bi-arrow-right"></i></a></li>
+            </ul>
+        </section>
+    </main>  
+    
+</div>

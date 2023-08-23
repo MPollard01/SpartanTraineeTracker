@@ -42,6 +42,15 @@ namespace TraineeTracker.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<TraineeTest>> GetTraineeTestsWithCategoryByTraineeId(string traineeId)
+        {
+            return await _dbContext.TraineeTests
+                .Where(x => x.TraineeId == traineeId)
+                .Include(x => x.SubCategory)
+                .ThenInclude(x => x.Category)
+                .ToListAsync();
+        }
+
         public async Task<TraineeTest> GetTraineeTestWithAnswersById(int id)
         {
             return await _dbContext.TraineeTests

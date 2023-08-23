@@ -20,6 +20,13 @@ namespace TraineeTracker.Api.Controllers
             _mediator = mediator;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<TraineeTestDto>>> GetAll()
+        {
+            var tests = await _mediator.Send(new GetTraineeTestListRequest());
+            return Ok(tests);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TraineeTestDetailDto>> Get(int id)
         {
